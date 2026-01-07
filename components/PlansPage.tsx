@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 import { PET_PLANS } from '../constants';
 
-const PlansPage: React.FC = () => {
+interface PlansPageProps {
+  onQuoteClick: () => void;
+}
+
+const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
   const [species, setSpecies] = useState<'dog' | 'cat'>('dog');
   const [petCount, setPetCount] = useState(1);
 
@@ -124,9 +128,12 @@ const PlansPage: React.FC = () => {
                             <span className="text-3xl font-black text-gray-900 tracking-tighter">{Math.round(finalPrice)}</span>
                             <span className="text-[10px] font-bold text-gray-400">/mo</span>
                           </div>
-                          <button className={`mt-4 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                            plan.featured ? 'bg-primary text-white shadow-lg' : 'bg-gray-900 text-white'
-                          }`}>
+                          <button 
+                            onClick={onQuoteClick}
+                            className={`mt-4 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                              plan.featured ? 'bg-primary text-white shadow-lg' : 'bg-gray-900 text-white'
+                            }`}
+                          >
                             Select
                           </button>
                         </div>
@@ -235,7 +242,10 @@ const PlansPage: React.FC = () => {
             Our expert consultants are ready to guide you through the switch to smarter pet insurance.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <button className="bg-primary text-white px-12 py-5 rounded-[24px] font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform">
+            <button 
+              onClick={onQuoteClick}
+              className="bg-primary text-white px-12 py-5 rounded-[24px] font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform"
+            >
               Get Started Now
             </button>
             <a href="tel:0101094015" className="bg-white text-gray-900 border-2 border-gray-200 px-12 py-5 rounded-[24px] font-black text-lg hover:border-primary hover:text-primary transition-all">

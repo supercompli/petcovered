@@ -29,3 +29,20 @@ export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
 }
+
+export interface QuoteLead {
+  id: string;
+  submittedAt: string;
+  petName: string;
+  species: string;
+  breed: string;
+  premium: string;
+  contactEmail: string;
+  details: any;
+}
+
+export interface WebhookSettings {
+  url: string;
+  format: 'json' | 'form';
+  enabled: boolean;
+}

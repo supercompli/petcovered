@@ -7,14 +7,29 @@ import AIChat from './components/AIChat';
 import AboutPage from './components/AboutPage';
 import ClaimsPage from './components/ClaimsPage';
 import PlansPage from './components/PlansPage';
+import QuotePage from './components/QuotePage';
+import AdminPanel from './components/AdminPanel';
 import { FAQS, TESTIMONIALS } from './constants';
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'home' | 'about' | 'claims' | 'plans'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin'>('home');
 
-  // Scroll to top on view change
+  // Simple URL hash routing for refresh support
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['home', 'about', 'claims', 'plans', 'quote', 'admin'].includes(hash)) {
+        setCurrentView(hash as any);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    handleHash();
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    window.location.hash = currentView;
   }, [currentView]);
 
   const renderHome = () => (
@@ -37,19 +52,11 @@ const App: React.FC = () => {
                 View Plans
               </button>
               <button 
-                onClick={() => setCurrentView('about')}
-                className="bg-white text-gray-700 border-2 border-gray-200 px-8 py-4 rounded-2xl font-bold text-lg hover:border-primary hover:text-primary transition-all"
+                onClick={() => setCurrentView('quote')}
+                className="bg-gray-900 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition-all transform hover:-translate-y-1 text-center"
               >
-                How it Works
+                Quick Quote
               </button>
-            </div>
-            <div className="mt-10 flex items-center gap-4 justify-center lg:justify-start">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <img key={i} className="w-10 h-10 rounded-full border-2 border-white" src={`https://picsum.photos/100/100?random=${i}`} alt="user" />
-                ))}
-              </div>
-              <p className="text-sm text-gray-500">Trusted by <span className="font-bold text-gray-800">10k+ pet owners</span></p>
             </div>
           </div>
           
@@ -64,27 +71,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Quick Grid */}
-      <section className="bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-          {[
-            { label: 'Low Premiums', icon: '💰' },
-            { label: 'High Limits', icon: '📈' },
-            { label: 'Double Up', icon: '⚡' },
-            { label: 'Fast Claims', icon: '⏱️' },
-            { label: 'No Paperwork', icon: '📝' },
-            { label: 'Low Excess', icon: '✅' },
-          ].map((f, i) => (
-            <div key={i} className="bg-white p-6 rounded-2xl shadow-sm text-center border border-gray-100 hover:shadow-md transition-shadow">
-              <span className="text-3xl mb-3 block">{f.icon}</span>
-              <span className="text-sm font-bold text-gray-700">{f.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Pricing Section - Quick View */}
-      <PricingTable />
+      <PricingTable onQuoteClick={() => setCurrentView('quote')} />
 
       {/* FAQ Section */}
       <section id="faq" className="py-24 bg-white">
@@ -103,64 +90,24 @@ const App: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* Testimonials */}
-      <section className="py-24 bg-primary/5">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Wonderful Stories</h2>
-          <p className="text-gray-500 text-center mb-16">From our family of pet owners</p>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="bg-white p-8 rounded-3xl shadow-sm relative border border-white hover:border-primary/20 transition-all text-center">
-                <div className="flex justify-center text-yellow-400 mb-4">
-                  {[...Array(t.stars)].map((_, j) => <span key={j}>★</span>)}
-                </div>
-                <p className="text-gray-600 mb-6 italic">"{t.text}"</p>
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900">{t.name}</h4>
-                    <p className="text-xs text-gray-500">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-24 bg-primary text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">You’ve come to the right place.</h2>
-          <p className="text-xl opacity-90 mb-10">Activate your online account and get started with your Petcovered® insurance plan today.</p>
-          <button 
-            onClick={() => setCurrentView('plans')}
-            className="bg-white text-primary px-10 py-4 rounded-full font-black text-xl hover:scale-105 transition-transform shadow-2xl"
-          >
-            Let's Do This
-          </button>
-        </div>
-      </section>
     </>
   );
 
   return (
     <div className="min-h-screen flex flex-col selection:bg-primary/20">
-      <Header onViewChange={setCurrentView} currentView={currentView} />
+      {currentView !== 'admin' && <Header onViewChange={setCurrentView} currentView={currentView} />}
       
       <main className="flex-grow">
         {currentView === 'home' && renderHome()}
         {currentView === 'about' && <AboutPage />}
         {currentView === 'claims' && <ClaimsPage />}
-        {currentView === 'plans' && <PlansPage />}
+        {currentView === 'plans' && <PlansPage onQuoteClick={() => setCurrentView('quote')} />}
+        {currentView === 'quote' && <QuotePage onBack={() => setCurrentView('plans')} />}
+        {currentView === 'admin' && <AdminPanel onExit={() => setCurrentView('home')} />}
       </main>
 
-      <Footer onViewChange={setCurrentView} />
-      <AIChat />
+      {currentView !== 'admin' && <Footer onViewChange={setCurrentView} currentView={currentView} />}
+      {currentView !== 'admin' && <AIChat />}
     </div>
   );
 };

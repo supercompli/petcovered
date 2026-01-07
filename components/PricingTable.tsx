@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 import { PET_PLANS } from '../constants';
 
-const PricingTable: React.FC = () => {
+interface PricingTableProps {
+  onQuoteClick: () => void;
+}
+
+const PricingTable: React.FC<PricingTableProps> = ({ onQuoteClick }) => {
   const [petCount, setPetCount] = useState(1);
   const [species, setSpecies] = useState<'dog' | 'cat'>('dog');
   
@@ -120,11 +124,14 @@ const PricingTable: React.FC = () => {
                     ))}
                   </ul>
 
-                  <button className={`w-full py-4 rounded-2xl font-black text-sm transition-all transform active:scale-95 ${
-                    plan.featured 
-                      ? 'bg-primary text-white hover:bg-opacity-90 shadow-lg shadow-primary/20' 
-                      : 'bg-gray-900 text-white hover:bg-black'
-                  }`}>
+                  <button 
+                    onClick={onQuoteClick}
+                    className={`w-full py-4 rounded-2xl font-black text-sm transition-all transform active:scale-95 ${
+                      plan.featured 
+                        ? 'bg-primary text-white hover:bg-opacity-90 shadow-lg shadow-primary/20' 
+                        : 'bg-gray-900 text-white hover:bg-black'
+                    }`}
+                  >
                     Get Quote
                   </button>
                 </div>

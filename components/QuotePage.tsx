@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { PET_PLANS } from '../constants';
 
@@ -71,11 +72,13 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
 
   const captureLead = async () => {
     setIsCapturing(true);
-    // Save lead to localStorage (Leads section in Admin)
-    const existingLeads = JSON.parse(localStorage.getItem('petcovered_leads') || '[]');
-    const newLead = {
-      id: `LEAD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-      submittedAt: new Date().toISOString(),
+    const leadId = `LEAD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    const timestamp = new Date().toISOString();
+
+    // Internal storage object (can stay nested for detail view)
+    const leadRecord = {
+      id: leadId,
+      submittedAt: timestamp,
       petName: formData.petName,
       species: formData.species,
       breed: formData.breed,
@@ -85,21 +88,42 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       plan: selectedPlan?.name || 'Unknown'
     };
     
-    localStorage.setItem('petcovered_leads', JSON.stringify([newLead, ...existingLeads]));
+    // Save locally
+    const existingLeads = JSON.parse(localStorage.getItem('petcovered_leads') || '[]');
+    localStorage.setItem('petcovered_leads', JSON.stringify([leadRecord, ...existingLeads]));
+    
+    // Construct FLAT Webhook Payload
+    const flatPayload = {
+      lead_id: leadId,
+      source: "petcovered_web_v3",
+      pet_name: formData.petName,
+      pet_species: formData.species,
+      pet_breed: formData.breed,
+      pet_age_years: parseInt(formData.age || '0'),
+      pet_gender: formData.gender,
+      pet_weight_kg: formData.weight,
+      pet_dob: formData.dob,
+      owner_email: formData.email,
+      selected_plan: selectedPlan?.name || 'Unknown',
+      monthly_premium: `R${formData.deductionAmount}`,
+      health_history: `${formData.healthCondition} | ${formData.additionalHealth}`,
+      acc_holder: formData.accHolder,
+      bank_name: formData.bank,
+      timestamp: timestamp
+    };
     
     // Webhook Execution
     const webhookSettings = JSON.parse(localStorage.getItem('petcovered_webhook') || '{"enabled": false}');
     if (webhookSettings.enabled && webhookSettings.url) {
       try {
         const payload = webhookSettings.format === 'json' 
-          ? JSON.stringify(newLead)
-          : new URLSearchParams(newLead as any).toString();
+          ? JSON.stringify(flatPayload)
+          : new URLSearchParams(flatPayload as any).toString();
           
         const headers = webhookSettings.format === 'json'
           ? { 'Content-Type': 'application/json' }
           : { 'Content-Type': 'application/x-www-form-urlencoded' };
 
-        // Attempt a standard fetch (using no-cors as many generic webhooks don't implement CORS headers)
         await fetch(webhookSettings.url, {
           method: 'POST',
           mode: 'no-cors',
@@ -107,7 +131,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
           body: payload
         });
       } catch (err) {
-        console.warn("Webhook delivery attempted. Note: Cross-origin restrictions might prevent success response visibility.", err);
+        console.warn("Webhook delivery attempted (Flat).", err);
       }
     }
     

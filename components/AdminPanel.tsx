@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { QuoteLead, WebhookSettings } from '../types';
 import Logo from './Logo';
@@ -263,32 +264,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
                 <div className="bg-[#0c161c] rounded-[32px] p-10 relative group">
                   <div className="absolute top-6 right-8 flex items-center gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                    <span className="text-[10px] font-black uppercase text-primary tracking-widest">Standard Schema v2.1</span>
+                    <span className="text-[10px] font-black uppercase text-primary tracking-widest">Standard Flat Schema v3.0</span>
                   </div>
                   <pre className="overflow-x-auto font-mono text-[11px] text-gray-500 leading-relaxed custom-scrollbar pt-6">
 {`{
   "lead_id": "string",
-  "source": "petcovered_web_v1",
-  "pet_data": {
-    "name": "string",
-    "species": "Dog|Cat",
-    "breed": "string",
-    "age_years": "integer"
-  },
-  "quote_summary": {
-    "monthly_premium": "float",
-    "currency": "ZAR"
-  },
-  "authorization": {
-    "account_holder": "string",
-    "timestamp": "ISO-8601"
-  }
+  "source": "petcovered_web_v3",
+  "pet_name": "string",
+  "pet_species": "Dog|Cat",
+  "pet_breed": "string",
+  "pet_age_years": "integer",
+  "pet_gender": "M|F",
+  "pet_weight_kg": "string",
+  "pet_dob": "ISO-8601",
+  "owner_email": "string",
+  "selected_plan": "string",
+  "monthly_premium": "string",
+  "health_history": "string",
+  "acc_holder": "string",
+  "bank_name": "string",
+  "timestamp": "ISO-8601"
 }`}
                   </pre>
                   <div className="mt-8 pt-8 border-t border-white/5">
                     <p className="text-[10px] text-gray-600 font-bold leading-relaxed">
-                      * Notes: Webhooks use retry-backoff logic. Authentication headers can be added in advanced settings. 
-                      JSON is recommended for modern CRM integrations like Salesforce or Hubspot.
+                      * Notes: Flattened for maximum compatibility with Zapier, Make, and CRM inbound webhooks. 
+                      Standard ISO-8601 timestamps used for all date fields.
                     </p>
                   </div>
                 </div>

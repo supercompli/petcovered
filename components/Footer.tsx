@@ -79,11 +79,11 @@ const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
         <div className={`border-t border-gray-800 flex flex-col items-center gap-6 ${isQuotePage ? 'pt-0' : 'pt-8'}`}>
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6 w-full">
             <p className="text-[10px] leading-relaxed max-w-4xl text-center lg:text-left text-gray-500">
-              Petcovered® is part of Socovered Financial Services, a registered financial services provider, FSP 51127. 
+              Petcovered® is part of Covered Financial Services, a registered financial services provider, FSP 54871. 
               Pet Insurance product is administered and underwritten by GENRIC Insurance Company Limited (FSP: 43638), 
               an authorised Financial Services Provider and licensed non-life Insurer. 
               Health Insurance Provider, not a Medical Aid Scheme. 
-              ©2021-2025 Petcovered®. All Rights Reserved.
+              ©2021-2026 Petcovered®. All Rights Reserved.
             </p>
             <div className="flex gap-6 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
               <button onClick={() => onViewChange('admin')} className="text-gray-700 hover:text-gray-500 transition-colors">Admin Login</button>

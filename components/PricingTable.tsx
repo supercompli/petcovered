@@ -7,15 +7,17 @@ const PricingTable: React.FC = () => {
   const [species, setSpecies] = useState<'dog' | 'cat'>('dog');
   
   const discount = petCount >= 2 ? 0.10 : 0;
+  // Reverse plans so Comprehensive+ is first
+  const REVERSED_PLANS = [...PET_PLANS].reverse();
 
   return (
     <section id="plans" className="py-20 bg-gray-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <span className="text-primary font-bold tracking-[0.2em] text-xs uppercase mb-2 block">Insurance Coverage</span>
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">5 Simple Plans</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Compare Our Plans</h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Choose the most comprehensive pet insurance coverage tailored to your needs and budget.
+            Calculate your total monthly premium based on the number of furry family members you have.
           </p>
           
           <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-8">
@@ -39,7 +41,7 @@ const PricingTable: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="font-bold text-gray-700">Number of Pets:</span>
+              <span className="font-bold text-gray-700">How many pets?</span>
               <div className="flex items-center bg-white rounded-full shadow-inner border p-1">
                 {[1, 2, 3, 4, 5].map(n => (
                   <button
@@ -58,7 +60,7 @@ const PricingTable: React.FC = () => {
 
           {petCount >= 2 && (
             <div className="mt-6 inline-flex animate-bounce">
-              <span className="text-green-600 font-black bg-green-50 px-6 py-2 rounded-full text-sm border border-green-200">
+              <span className="text-green-600 font-black bg-green-50 px-6 py-2 rounded-full text-[10px] uppercase tracking-widest border border-green-200">
                 🎉 10% Multi-pet Discount Applied!
               </span>
             </div>
@@ -66,7 +68,7 @@ const PricingTable: React.FC = () => {
         </div>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-5 gap-4">
-          {PET_PLANS.map((plan) => {
+          {REVERSED_PLANS.map((plan) => {
             const basePrice = (species === 'dog' ? plan.priceDog : plan.priceCat) * petCount;
             const finalPrice = basePrice * (1 - discount);
 
@@ -87,10 +89,13 @@ const PricingTable: React.FC = () => {
                   <h3 className="text-lg font-black text-gray-900 mb-1 leading-tight">{plan.name}</h3>
                   <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider h-8 mb-4">{plan.caption}</p>
                   
-                  <div className="flex items-baseline mb-6">
-                    <span className="text-gray-400 text-xs font-bold">R</span>
-                    <span className="text-3xl font-black text-gray-900 mx-0.5">{Math.round(finalPrice)}</span>
-                    <span className="text-gray-400 text-[10px] font-bold">/mo</span>
+                  <div className="flex flex-col mb-6">
+                    <span className="text-[10px] uppercase font-black text-gray-400 tracking-widest mb-1">Total Premium</span>
+                    <div className="flex items-baseline">
+                      <span className="text-gray-400 text-xs font-bold">R</span>
+                      <span className="text-4xl font-black text-gray-900 mx-0.5 tracking-tighter">{Math.round(finalPrice)}</span>
+                      <span className="text-gray-400 text-[10px] font-bold">/mo</span>
+                    </div>
                   </div>
 
                   <div className="mb-6 space-y-2 bg-gray-50 p-4 rounded-2xl">
@@ -101,10 +106,6 @@ const PricingTable: React.FC = () => {
                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-tighter">
                       <span className="text-gray-400">Excess</span>
                       <span className="text-gray-600">{plan.excess}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-tighter">
-                      <span className="text-gray-400">Waiting Period</span>
-                      <span className="text-gray-600">{plan.waitingPeriod}</span>
                     </div>
                   </div>
 
@@ -135,33 +136,45 @@ const PricingTable: React.FC = () => {
         <div className="mt-12 bg-white rounded-[40px] p-8 md:p-12 shadow-sm border border-gray-100">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h3 className="text-2xl font-bold mb-6">Additional Options</h3>
+              <h3 className="text-2xl font-bold mb-6 text-gray-900">Additional Options</h3>
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-2xl">✨</div>
                   <div>
-                    <h4 className="font-bold text-gray-900">Routine Care Option</h4>
-                    <p className="text-sm text-gray-500">Only R85 per pet, per month for wellness checks and vaccinations.</p>
+                    <h4 className="font-black text-gray-900 text-sm">Routine Care Option</h4>
+                    <p className="text-xs text-gray-500">Only R85 per pet, per month for wellness checks and vaccinations.</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-2xl">⏫</div>
                   <div>
-                    <h4 className="font-bold text-gray-900">Double Up Option</h4>
-                    <p className="text-sm text-gray-500">Double your premium to double your annual limits instantly.</p>
+                    <h4 className="font-black text-gray-900 text-sm">Double Up Option</h4>
+                    <p className="text-xs text-gray-500">Double your premium to double your annual limits instantly.</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="bg-primary/5 rounded-3xl p-8 border border-primary/10">
-              <h4 className="font-bold text-primary mb-4 uppercase tracking-widest text-xs">Why PetCovered®?</h4>
-              <ul className="grid grid-cols-2 gap-4 text-xs font-bold text-gray-700">
-                <li>✓ All Accidents & Illness</li>
-                <li>✓ Routine Care</li>
-                <li>✓ No Breed Exclusion</li>
-                <li>✓ Prompt Settlements</li>
-                <li>✓ Dental Cover</li>
-                <li>✓ Specialist Treatments</li>
+              <h4 className="font-black text-primary mb-4 uppercase tracking-widest text-[10px]">Why Petcovered®?</h4>
+              <ul className="grid grid-cols-2 gap-y-3 gap-x-6 text-[11px] font-bold text-gray-700">
+                <li className="flex items-center gap-2">
+                  <span className="text-primary">✓</span> All Accidents & Illness
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-primary">✓</span> Routine Care
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-primary">✓</span> No Breed Exclusion
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-primary">✓</span> Prompt Settlements
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-primary">✓</span> Dental Cover
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-primary">✓</span> Specialist Treatments
+                </li>
               </ul>
             </div>
           </div>

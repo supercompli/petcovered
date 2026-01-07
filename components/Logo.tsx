@@ -46,7 +46,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', variant = 'default' }) => {
           style={{ color: primaryColor }} 
           className="text-xl font-black tracking-tight"
         >
-          Pet<span className="font-medium">Covered</span>
+          Pet<span className="font-medium">covered</span>
         </span>
         <span 
           style={{ color: secondaryColor }} 

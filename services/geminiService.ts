@@ -6,7 +6,7 @@ import { PET_PLANS } from "../constants";
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const SYSTEM_INSTRUCTION = `
-You are an expert Pet Insurance Assistant for PetCovered®, underwritten by GENRIC Insurance.
+You are an expert Pet Insurance Assistant for Petcovered®, underwritten by GENRIC Insurance.
 Your goal is to help users understand their pet insurance options based on the official 5-plan brochure.
 
 Current Plans & Benefits:

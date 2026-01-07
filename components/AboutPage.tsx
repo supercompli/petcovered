@@ -53,10 +53,10 @@ const AboutPage: React.FC = () => {
               </div>
               <div className="space-y-4">
                 <p className="text-gray-600 leading-relaxed">
-                  Our rapid growth has seen co-founder <span className="font-bold text-gray-900 underline decoration-primary/20 decoration-4">Akhona Ngwane (CEO)</span> build a team spanning three offices, acquiring leading providers to ensure PetCovered® remains the gold standard.
+                  Our rapid growth has seen co-founder <span className="font-bold text-gray-900 underline decoration-primary/20 decoration-4">Akhona Ngwane (CEO)</span> build a team spanning three offices, acquiring leading providers to ensure Petcovered® remains the gold standard.
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  PetCovered® is proudly underwritten by <span className="font-bold">Genric Insurance</span>, ensuring financial stability and peace of mind for every claim.
+                  Petcovered® is proudly underwritten by <span className="font-bold">Genric Insurance</span>, ensuring financial stability and peace of mind for every claim.
                 </p>
               </div>
             </div>

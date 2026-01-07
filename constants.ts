@@ -129,12 +129,12 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Siphesilisiwe",
     role: "Recently Hospitalised",
     stars: 5,
-    text: "My experience with PetCovered® has been very positive. Chantelle & Zelda their consultants are always helpful."
+    text: "My experience with Petcovered® has been very positive. Chantelle & Zelda their consultants are always helpful."
   },
   {
     name: "Jeandrik",
     role: "Online Applicant",
     stars: 5,
-    text: "I did my application online and I had a very quick response. Bradford helped me with amazing service."
+    text: "I did my application online and I had a very quick response. Bradford helped me with amazing service. I will promote Petcovered® everywhere!"
   }
 ];

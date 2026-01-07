@@ -6,7 +6,7 @@ import { ChatMessage } from '../types';
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: "Hi! I'm your PetCovered assistant. Ask me anything about our plans or coverage!" }
+    { role: 'model', text: "Hi! I'm your Petcovered assistant. Ask me anything about our plans or coverage!" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);

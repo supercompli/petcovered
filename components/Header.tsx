@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onViewChange, currentView }) => {
         <div className="md:hidden bg-white border-t px-4 py-4 space-y-4 font-semibold shadow-xl">
           <button onClick={() => handleNav('home')} className={`block w-full text-left py-2 ${currentView === 'home' ? 'text-primary' : 'text-gray-700'}`}>Home</button>
           <button onClick={() => handleNav('plans')} className={`block w-full text-left py-2 ${currentView === 'plans' ? 'text-primary' : 'text-gray-700'}`}>Plans</button>
-          <button onClick={() => handleNav('about')} className={`block w-full text-left py-2 ${currentView === 'about' ? 'text-primary' : 'text-gray-700'}`}>About PetCovered®</button>
+          <button onClick={() => handleNav('about')} className={`block w-full text-left py-2 ${currentView === 'about' ? 'text-primary' : 'text-gray-700'}`}>About Petcovered®</button>
           <button onClick={() => handleNav('claims')} className={`block w-full text-left py-2 ${currentView === 'claims' ? 'text-primary' : 'text-gray-700'}`}>How to Claim</button>
           <a href="#faq" className="block py-2 text-gray-700">FAQs</a>
           <button className="w-full bg-primary text-white px-6 py-3 rounded-xl shadow-lg">

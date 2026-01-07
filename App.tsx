@@ -136,7 +136,7 @@ const App: React.FC = () => {
       <section className="py-24 bg-primary text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6">You’ve come to the right place.</h2>
-          <p className="text-xl opacity-90 mb-10">Activate your online account and get started with your PetCovered® insurance plan today.</p>
+          <p className="text-xl opacity-90 mb-10">Activate your online account and get started with your Petcovered® insurance plan today.</p>
           <button 
             onClick={() => setCurrentView('plans')}
             className="bg-white text-primary px-10 py-4 rounded-full font-black text-xl hover:scale-105 transition-transform shadow-2xl"

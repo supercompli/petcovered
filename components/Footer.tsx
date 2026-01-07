@@ -16,7 +16,7 @@ const Footer: React.FC<FooterProps> = ({ onViewChange }) => {
             <div>
               <Logo variant="light" className="mb-6 opacity-90" />
               <p className="text-sm leading-relaxed">
-                PetCovered® is an affordable health insurance solution for individuals and families. 
+                Petcovered® is an affordable health insurance solution for individuals and families. 
                 It’s great value for money and offers access to private healthcare services.
               </p>
             </div>
@@ -49,7 +49,7 @@ const Footer: React.FC<FooterProps> = ({ onViewChange }) => {
             <h4 className="text-white font-bold mb-6 border-b border-gray-800 pb-2">Quick Links</h4>
             <ul className="space-y-3 text-sm">
               <li><button onClick={() => onViewChange('plans')} className="hover:text-white transition-colors">Compare Plans</button></li>
-              <li><button onClick={() => onViewChange('about')} className="hover:text-white transition-colors">About PetCovered®</button></li>
+              <li><button onClick={() => onViewChange('about')} className="hover:text-white transition-colors">About Petcovered®</button></li>
               <li><button onClick={() => onViewChange('claims')} className="hover:text-white transition-colors">How to Claim</button></li>
               <li><button onClick={() => onViewChange('home')} className="hover:text-white transition-colors">Product Summary</button></li>
             </ul>
@@ -73,11 +73,11 @@ const Footer: React.FC<FooterProps> = ({ onViewChange }) => {
 
         <div className="border-t border-gray-800 pt-8 flex flex-col lg:flex-row justify-between items-center gap-6">
           <p className="text-[10px] leading-relaxed max-w-4xl text-center lg:text-left text-gray-500">
-            PetCovered® is part of Socovered Financial Services, a registered financial services provider, FSP 51127. 
+            Petcovered® is part of Socovered Financial Services, a registered financial services provider, FSP 51127. 
             Pet Insurance product is administered and underwritten by GENRIC Insurance Company Limited (FSP: 43638), 
             an authorised Financial Services Provider and licensed non-life Insurer. 
             Health Insurance Provider, not a Medical Aid Scheme. 
-            ©2021-2025 PetCovered®. All Rights Reserved.
+            ©2021-2025 Petcovered®. All Rights Reserved.
           </p>
           <div className="flex gap-6 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
             <a href="#" className="hover:text-white transition-colors">Terms</a>

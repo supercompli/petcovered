@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { QuoteLead, WebhookSettings } from '../types';
 import Logo from './Logo';
@@ -87,7 +86,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
           </button>
         </nav>
         <div className="p-8 border-t border-white/5">
-          <button onClick={onExit} className="w-full text-center text-[10px] font-black text-gray-500 hover:text-red-400 uppercase tracking-[0.2em] transition-colors">Terminte Session</button>
+          <button onClick={onExit} className="w-full text-center text-[10px] font-black text-gray-500 hover:text-red-400 uppercase tracking-[0.2em] transition-colors">Terminate Session</button>
         </div>
       </div>
 

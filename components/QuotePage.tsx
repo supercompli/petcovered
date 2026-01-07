@@ -38,7 +38,6 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
 
   const selectedPlan = PET_PLANS.find(p => p.id === (selectedPlanId || 'comp-plus'));
 
-  // Sync deduction amount with plan price initially
   useEffect(() => {
     if (selectedPlan && !formData.deductionAmount) {
       setFormData(prev => ({ 
@@ -48,7 +47,6 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     }
   }, [selectedPlan, formData.species]);
 
-  // Age calculation
   useEffect(() => {
     if (formData.dob) {
       const birthDate = new Date(formData.dob);
@@ -75,7 +73,6 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     const leadId = `LEAD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
     const timestamp = new Date().toISOString();
 
-    // Internal storage object (can stay nested for detail view)
     const leadRecord = {
       id: leadId,
       submittedAt: timestamp,
@@ -88,11 +85,9 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       plan: selectedPlan?.name || 'Unknown'
     };
     
-    // Save locally
     const existingLeads = JSON.parse(localStorage.getItem('petcovered_leads') || '[]');
     localStorage.setItem('petcovered_leads', JSON.stringify([leadRecord, ...existingLeads]));
     
-    // Construct FLAT Webhook Payload
     const flatPayload = {
       lead_id: leadId,
       source: "petcovered_web_v3",
@@ -112,7 +107,6 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       timestamp: timestamp
     };
     
-    // Webhook Execution
     const webhookSettings = JSON.parse(localStorage.getItem('petcovered_webhook') || '{"enabled": false}');
     if (webhookSettings.enabled && webhookSettings.url) {
       try {
@@ -148,75 +142,71 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
 
   if (submitted) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center p-4 animate-fade-in">
-        <div className="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center text-5xl mb-8 shadow-2xl animate-bounce">✓</div>
-        <h2 className="text-4xl font-black text-gray-900 mb-4">Finalized & Secure</h2>
-        <p className="text-gray-600 max-w-md mb-10 text-lg">
-          Your banking authorization for {selectedPlan?.name} is successful. Our underwriters at GENRIC will issue your policy document within 24 hours.
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4 animate-fade-in">
+        <div className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-2xl animate-bounce">✓</div>
+        <h2 className="text-3xl font-black text-gray-900 mb-2">Finalized & Secure</h2>
+        <p className="text-gray-600 max-w-sm mb-8 text-base">
+          Our underwriters at GENRIC will issue your policy document for {selectedPlan?.name} within 24 hours.
         </p>
-        <button onClick={() => window.location.hash = 'home'} className="bg-primary text-white px-12 py-4 rounded-2xl font-black shadow-xl">Return to Home</button>
+        <button onClick={() => window.location.hash = 'home'} className="bg-primary text-white px-10 py-4 rounded-xl font-black shadow-xl">Return to Home</button>
       </div>
     );
   }
 
   return (
-    <div className="animate-fade-in bg-gray-50 min-h-screen py-12 md:py-20">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="animate-fade-in bg-gray-50 min-h-screen py-8 md:py-12">
+      <div className="max-w-2xl mx-auto px-4">
         
-        {/* Modern Stepper */}
-        <div className="mb-12 relative">
-          <div className="flex justify-between items-center relative z-10">
-            {['Start', 'Health', 'Details', 'Banking'].map((label, i) => {
+        {/* Compact Stepper */}
+        <div className="mb-8 relative">
+          <div className="flex justify-between items-center relative z-10 px-2">
+            {['Start', 'Health', 'Details', 'Bank'].map((label, i) => {
               const stepNum = i + 1;
               const isActive = step === stepNum;
               const isPast = step > stepNum;
               return (
-                <div key={i} className="flex flex-col items-center gap-3">
-                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center font-black transition-all duration-500 border-4 ${
-                    isActive ? 'bg-primary text-white border-primary shadow-xl scale-110' : 
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black transition-all duration-500 border-2 ${
+                    isActive ? 'bg-primary text-white border-primary shadow-lg' : 
                     isPast ? 'bg-green-500 text-white border-green-500' : 'bg-white text-gray-300 border-gray-200'
                   }`}>
-                    {isPast ? '✓' : stepNum}
+                    <span className="text-xs">{isPast ? '✓' : stepNum}</span>
                   </div>
-                  <span className={`text-[10px] font-black uppercase tracking-widest ${isActive ? 'text-primary' : 'text-gray-400'}`}>{label}</span>
+                  <span className={`text-[9px] font-black uppercase tracking-widest ${isActive ? 'text-primary' : 'text-gray-400'}`}>{label}</span>
                 </div>
               );
             })}
           </div>
-          <div className="absolute top-5 md:top-6 left-0 w-full h-1 bg-gray-200 -z-0 rounded-full">
+          <div className="absolute top-4 left-0 w-full h-0.5 bg-gray-200 -z-0 rounded-full">
             <div className="h-full bg-primary transition-all duration-700 ease-in-out rounded-full" style={{ width: `${((step - 1) / 3) * 100}%` }}></div>
           </div>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6">
           
-          {/* Step 1: Identity & Plan Reflect */}
+          {/* Step 1: Identity */}
           {step === 1 && (
-            <div className="bg-white rounded-[40px] p-8 md:p-12 shadow-2xl border border-gray-100 animate-slide-up">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-6 border-b border-gray-50">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-3xl">👋</div>
+            <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-xl border border-gray-100 animate-slide-up">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-xl">👋</div>
                   <div>
-                    <h2 className="text-2xl font-black text-gray-900">Let's Get Started</h2>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Initial Selection</p>
+                    <h2 className="text-xl font-black text-gray-900">Let's Get Started</h2>
+                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Plan: {selectedPlan?.name}</p>
                   </div>
-                </div>
-                <div className="bg-primary/[0.03] border border-primary/10 px-6 py-3 rounded-2xl flex flex-col items-end">
-                   <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Selected Plan</span>
-                   <span className="text-lg font-black text-gray-900">{selectedPlan?.name}</span>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid sm:grid-cols-2 gap-5">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black uppercase text-gray-400 tracking-widest ml-1">Name of Pet</label>
-                  <input type="text" name="petName" value={formData.petName} onChange={handleChange} placeholder="What do you call them?" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-2xl px-6 py-4 outline-none transition-all font-bold" />
+                  <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Name of Pet</label>
+                  <input type="text" name="petName" value={formData.petName} onChange={handleChange} placeholder="What do you call them?" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 outline-none transition-all font-bold text-sm" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black uppercase text-gray-400 tracking-widest ml-1">Species</label>
-                  <div className="flex bg-gray-50 p-1 rounded-2xl">
+                  <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-1">Species</label>
+                  <div className="flex bg-gray-50 p-1 rounded-xl">
                     {['Dog', 'Cat'].map(s => (
-                      <button key={s} onClick={() => handleToggle('species', s)} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${formData.species === s ? 'bg-white text-primary shadow-md' : 'text-gray-400'}`}>
+                      <button key={s} onClick={() => handleToggle('species', s)} className={`flex-1 py-2.5 rounded-lg font-black text-xs transition-all ${formData.species === s ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>
                         {s}
                       </button>
                     ))}
@@ -224,100 +214,92 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                 </div>
               </div>
 
-              <div className="mt-12 flex justify-end">
+              <div className="mt-8 flex justify-end">
                 <button 
                   onClick={() => setStep(2)} 
                   disabled={!formData.petName}
-                  className="bg-primary text-white px-12 py-5 rounded-3xl font-black text-lg shadow-xl hover:scale-105 transition-all disabled:opacity-50"
+                  className="bg-primary text-white px-8 py-3.5 rounded-xl font-black text-base shadow-lg hover:scale-105 transition-all disabled:opacity-50"
                 >
-                  Continue to Health Questions
+                  Continue
                 </button>
               </div>
             </div>
           )}
 
-          {/* Step 2: Questions */}
+          {/* Step 2: Health Questions */}
           {step === 2 && (
-            <div className="bg-white rounded-[40px] p-8 md:p-12 shadow-2xl border border-gray-100 animate-slide-up">
-              <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
-                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-3xl">🩺</div>
+            <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-xl border border-gray-100 animate-slide-up">
+              <div className="flex items-center gap-3 mb-8 pb-4 border-b border-gray-50">
+                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-xl">🩺</div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900">Health Questions</h2>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">For {formData.petName}</p>
+                  <h2 className="text-xl font-black text-gray-900">Health Questions</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">For {formData.petName}</p>
                 </div>
               </div>
 
-              <div className="space-y-8">
-                <div className="space-y-3">
-                  <label className="text-sm font-black text-gray-800 block">1. Has your pet suffered from any conditions in the last two years?</label>
-                  <textarea name="healthCondition" value={formData.healthCondition} onChange={handleChange} placeholder="Please list the conditions if any..." className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-2xl px-6 py-4 outline-none transition-all font-bold min-h-[100px]"></textarea>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-800 block leading-snug">1. Has your pet suffered from any conditions in the last two years?</label>
+                  <textarea name="healthCondition" value={formData.healthCondition} onChange={handleChange} placeholder="Conditions if any..." className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 outline-none transition-all font-bold text-sm min-h-[80px]"></textarea>
                 </div>
-                <div className="space-y-3">
-                  <label className="text-sm font-black text-gray-800 block">2. Please provide any additional information about your pet’s health, physical condition or behaviour.</label>
-                  <textarea name="additionalHealth" value={formData.additionalHealth} onChange={handleChange} placeholder="Anything else we should know?" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-2xl px-6 py-4 outline-none transition-all font-bold min-h-[100px]"></textarea>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-800 block leading-snug">2. Additional info about your pet’s health or behavior?</label>
+                  <textarea name="additionalHealth" value={formData.additionalHealth} onChange={handleChange} placeholder="Anything else?" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 outline-none transition-all font-bold text-sm min-h-[80px]"></textarea>
                 </div>
                 {[
-                  { label: '3. Are vaccinations up to date?', name: 'vaccinations' },
-                  { label: '4. Ever used for commercial purposes?', name: 'commercial' },
-                  { label: '5. Permission to ask Vet for records?', name: 'vetPermission' }
+                  { label: '3. Vaccinations up to date?', name: 'vaccinations' },
+                  { label: '4. Ever used commercially?', name: 'commercial' },
+                  { label: '5. Vet record permission?', name: 'vetPermission' }
                 ].map(q => (
-                  <div key={q.name} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-gray-50 rounded-3xl border border-gray-100">
-                    <span className="text-sm font-black text-gray-800">{q.label}</span>
-                    <div className="flex bg-white p-1 rounded-xl shadow-inner w-fit">
+                  <div key={q.name} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <span className="text-xs font-black text-gray-800">{q.label}</span>
+                    <div className="flex bg-white p-1 rounded-lg shadow-inner w-fit">
                       {['Yes', 'No'].map(v => (
-                        <button key={v} onClick={() => handleToggle(q.name, v)} className={`px-10 py-2 rounded-lg font-black text-xs transition-all ${formData[q.name] === v ? 'bg-primary text-white shadow-md' : 'text-gray-400'}`}>{v}</button>
+                        <button key={v} onClick={() => handleToggle(q.name, v)} className={`px-6 py-1.5 rounded-md font-black text-[10px] transition-all ${formData[q.name] === v ? 'bg-primary text-white shadow-sm' : 'text-gray-400'}`}>{v}</button>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-12 flex justify-between items-center">
-                <button onClick={() => setStep(1)} className="text-gray-400 font-black uppercase text-xs">Back</button>
-                <button onClick={() => setStep(3)} className="bg-primary text-white px-12 py-5 rounded-3xl font-black text-lg shadow-xl hover:scale-105 transition-transform">Next: Pet Details</button>
+              <div className="mt-8 flex justify-between items-center">
+                <button onClick={() => setStep(1)} className="text-gray-400 font-black uppercase text-[10px]">Back</button>
+                <button onClick={() => setStep(3)} className="bg-primary text-white px-8 py-3.5 rounded-xl font-black text-base shadow-lg hover:scale-105 transition-transform">Next Step</button>
               </div>
             </div>
           )}
 
-          {/* Step 3: Details & Lead Capture */}
+          {/* Step 3: Physical Details */}
           {step === 3 && (
-            <div className="bg-white rounded-[40px] p-8 md:p-12 shadow-2xl border border-gray-100 animate-slide-up">
-              <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
-                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-3xl">🐕</div>
+            <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-xl border border-gray-100 animate-slide-up">
+              <div className="flex items-center gap-3 mb-8 pb-4 border-b border-gray-50">
+                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-xl">🐕</div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900">Physical Details</h2>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Finalizing the profile for {formData.petName}</p>
+                  <h2 className="text-xl font-black text-gray-900">Physical Details</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Completing {formData.petName}'s profile</p>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Gender</label>
-                  <div className="flex bg-gray-50 p-1 rounded-2xl">{['M', 'F'].map(g => (<button key={g} onClick={() => handleToggle('gender', g)} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${formData.gender === g ? 'bg-white text-primary shadow-md' : 'text-gray-400'}`}>{g === 'M' ? 'Male' : 'Female'}</button>))}</div>
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Gender</label>
+                  <div className="flex bg-gray-50 p-1 rounded-xl">{['M', 'F'].map(g => (<button key={g} onClick={() => handleToggle('gender', g)} className={`flex-1 py-2.5 rounded-lg font-black text-xs transition-all ${formData.gender === g ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>{g === 'M' ? 'Male' : 'Female'}</button>))}</div>
                 </div>
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Breed</label><input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="e.g. Bulldog" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-2xl px-6 py-4 font-bold" /></div>
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Weight (kg)</label><input type="number" name="weight" value={formData.weight} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-bold" /></div>
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Colour</label><input type="text" name="colour" value={formData.colour} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-bold" /></div>
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Date of Birth</label><input type="date" name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-bold" /></div>
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Microchip No. (Optional)</label><input type="text" name="chipNo" value={formData.chipNo} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-bold font-mono" /></div>
-                <div className="md:col-span-2 space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Your Contact Email</label><input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Where should we send your docs?" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-2xl px-6 py-4 font-bold" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Breed</label><input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="e.g. Bulldog" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Weight (kg)</label><input type="number" name="weight" value={formData.weight} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Colour</label><input type="text" name="colour" value={formData.colour} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Date of Birth</label><input type="date" name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Microchip No.</label><input type="text" name="chipNo" value={formData.chipNo} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm font-mono" /></div>
+                <div className="sm:col-span-2 space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Contact Email</label><input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email for documents..." className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 font-bold text-sm" /></div>
               </div>
 
-              <div className="mt-12 flex justify-between items-center">
-                <button onClick={() => setStep(2)} className="text-gray-400 font-black uppercase text-xs">Back</button>
+              <div className="mt-8 flex justify-between items-center">
+                <button onClick={() => setStep(2)} className="text-gray-400 font-black uppercase text-[10px]">Back</button>
                 <button 
                   onClick={captureLead} 
                   disabled={!formData.email || !formData.dob || isCapturing}
-                  className="bg-primary text-white px-12 py-5 rounded-3xl font-black text-lg shadow-xl hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-2"
+                  className="bg-primary text-white px-8 py-3.5 rounded-xl font-black text-base shadow-lg hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-2"
                 >
-                  {isCapturing ? (
-                    <>
-                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Capturing...
-                    </>
-                  ) : "Capture Quote & Proceed"}
+                  {isCapturing ? "Processing..." : "Capture Quote"}
                 </button>
               </div>
             </div>
@@ -325,50 +307,49 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
 
           {/* Step 4: Banking */}
           {step === 4 && (
-            <div className="bg-white rounded-[40px] p-8 md:p-12 shadow-2xl border border-gray-100 animate-slide-up">
-              <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
-                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-3xl">🏦</div>
+            <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-xl border border-gray-100 animate-slide-up">
+              <div className="flex items-center gap-3 mb-8 pb-4 border-b border-gray-50">
+                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-xl">🏦</div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900">Banking Details</h2>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Final Step for {selectedPlan?.name}</p>
+                  <h2 className="text-xl font-black text-gray-900">Banking Setup</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Final Step</p>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8 mb-10">
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Account Holder</label><input type="text" name="accHolder" value={formData.accHolder} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-bold" /></div>
-                <div className="space-y-1"><label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Account Number</label><input type="text" name="accNo" value={formData.accNo} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-bold font-mono" /></div>
+              <div className="grid sm:grid-cols-2 gap-5 mb-8">
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Account Holder</label><input type="text" name="accHolder" value={formData.accHolder} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Account Number</label><input type="text" name="accNo" value={formData.accNo} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm font-mono" /></div>
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Bank</label>
-                  <select name="bank" value={formData.bank} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-black">
+                  <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Bank</label>
+                  <select name="bank" value={formData.bank} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-black text-sm">
                     <option>Standard Bank</option><option>ABSA</option><option>FNB</option><option>Nedbank</option><option>Other</option>
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black uppercase text-gray-400 tracking-widest">Debit Day</label>
-                  <select name="debitDay" value={formData.debitDay} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-2xl px-6 py-4 font-black">
-                    {[1, 5, 15, 25, 30].map(d => <option key={d} value={d}>{d}{d === 1 ? 'st' : d === 2 ? 'nd' : d === 3 ? 'rd' : 'th'} of month</option>)}
+                  <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Debit Day</label>
+                  <select name="debitDay" value={formData.debitDay} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-black text-sm">
+                    {[1, 5, 15, 25, 30].map(d => <option key={d} value={d}>{d}{d === 1 ? 'st' : d === 2 ? 'nd' : d === 3 ? 'rd' : 'th'}</option>)}
                   </select>
                 </div>
               </div>
 
-              <div className="bg-gray-900 rounded-[32px] p-8 text-white mb-10 shadow-2xl border-2 border-primary/20">
-                <div className="flex items-start gap-4 mb-6">
-                  <input type="checkbox" name="authorise" checked={formData.authorise} onChange={handleChange} className="mt-1 w-6 h-6 rounded border-gray-700 bg-gray-800 text-primary" />
-                  <p className="text-xs font-bold leading-relaxed text-gray-300">
-                    I hereby authorise <span className="text-white">GENRIC Pet Insurance</span> to draw from my account the premium of <span className="text-primary font-black">R{formData.deductionAmount}</span> for the <span className="text-primary font-black">{selectedPlan?.name}</span> plan, inclusive of VAT.
+              <div className="bg-gray-900 rounded-2xl p-5 text-white mb-8 border border-primary/20">
+                <div className="flex items-start gap-3">
+                  <input type="checkbox" name="authorise" checked={formData.authorise} onChange={handleChange} className="mt-1 w-5 h-5 rounded border-gray-700 bg-gray-800 text-primary" />
+                  <p className="text-[11px] font-bold leading-tight text-gray-300">
+                    I authorise <span className="text-white">GENRIC Pet Insurance</span> to debit <span className="text-primary font-black text-sm">R{formData.deductionAmount}</span> for the {selectedPlan?.name} plan.
                   </p>
                 </div>
-                <p className="text-[10px] text-gray-500 italic">If a pet is accepted for cover on standard terms, we will issue the policy and proceed with the debit. Otherwise, we will contact you for permission.</p>
               </div>
 
               <div className="flex justify-between items-center">
-                <button onClick={() => setStep(3)} className="text-gray-400 font-black uppercase text-xs">Back</button>
+                <button onClick={() => setStep(3)} className="text-gray-400 font-black uppercase text-[10px]">Back</button>
                 <button 
                   disabled={!formData.authorise || !formData.accNo}
                   onClick={finalizeQuote}
-                  className="bg-primary text-white px-16 py-6 rounded-[28px] font-black text-xl shadow-2xl hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100"
+                  className="bg-primary text-white px-10 py-4 rounded-xl font-black text-lg shadow-xl hover:scale-105 transition-all disabled:opacity-50"
                 >
-                  Finalize My Quote
+                  Finalize
                 </button>
               </div>
             </div>

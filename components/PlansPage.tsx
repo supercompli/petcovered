@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { PET_PLANS } from '../constants';
 
 interface PlansPageProps {
-  onQuoteClick: () => void;
+  onQuoteClick: (planId: string) => void;
 }
 
 const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
@@ -129,7 +129,7 @@ const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
                             <span className="text-[10px] font-bold text-gray-400">/mo</span>
                           </div>
                           <button 
-                            onClick={onQuoteClick}
+                            onClick={() => onQuoteClick(plan.id)}
                             className={`mt-4 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                               plan.featured ? 'bg-primary text-white shadow-lg' : 'bg-gray-900 text-white'
                             }`}
@@ -242,8 +242,9 @@ const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
             Our expert consultants are ready to guide you through the switch to smarter pet insurance.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
+            {/* Fixed: Added fallback for general CTA since selectedPlanId is not defined in this scope */}
             <button 
-              onClick={onQuoteClick}
+              onClick={() => onQuoteClick('comp-plus')}
               className="bg-primary text-white px-12 py-5 rounded-[24px] font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform"
             >
               Get Started Now

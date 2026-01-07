@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { PET_PLANS } from '../constants';
 
 interface PricingTableProps {
-  onQuoteClick: () => void;
+  onQuoteClick: (planId: string) => void;
 }
 
 const PricingTable: React.FC<PricingTableProps> = ({ onQuoteClick }) => {
@@ -125,7 +125,7 @@ const PricingTable: React.FC<PricingTableProps> = ({ onQuoteClick }) => {
                   </ul>
 
                   <button 
-                    onClick={onQuoteClick}
+                    onClick={() => onQuoteClick(plan.id)}
                     className={`w-full py-4 rounded-2xl font-black text-sm transition-all transform active:scale-95 ${
                       plan.featured 
                         ? 'bg-primary text-white hover:bg-opacity-90 shadow-lg shadow-primary/20' 

@@ -13,6 +13,7 @@ import { FAQS, TESTIMONIALS } from './constants';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin'>('home');
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   // Simple URL hash routing for refresh support
   useEffect(() => {
@@ -32,6 +33,11 @@ const App: React.FC = () => {
     window.location.hash = currentView;
   }, [currentView]);
 
+  const handleStartQuote = (planId?: string) => {
+    if (planId) setSelectedPlanId(planId);
+    setCurrentView('quote');
+  };
+
   const renderHome = () => (
     <>
       {/* Hero Section */}
@@ -50,7 +56,7 @@ const App: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <button 
-                onClick={() => setCurrentView('quote')}
+                onClick={() => handleStartQuote('comp-plus')}
                 className="bg-primary text-white px-10 py-5 rounded-2xl font-black text-lg hover:shadow-2xl transition-all transform hover:-translate-y-1 text-center"
               >
                 Get Started
@@ -83,7 +89,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      <PricingTable onQuoteClick={() => setCurrentView('quote')} />
+      <PricingTable onQuoteClick={(pid) => handleStartQuote(pid)} />
 
       {/* Feature Section */}
       <section className="bg-gray-900 py-24 text-white">
@@ -127,7 +133,7 @@ const App: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight">Ready to join the family?</h2>
           <p className="text-xl opacity-80 mb-12 font-medium">Activate your online account and get started with your Petcovered® insurance plan in under 5 minutes.</p>
           <button 
-            onClick={() => setCurrentView('quote')}
+            onClick={() => handleStartQuote('comp-plus')}
             className="bg-white text-primary px-16 py-6 rounded-full font-black text-xl hover:scale-105 transition-transform shadow-2xl active:scale-95"
           >
             Get Started Now
@@ -145,8 +151,8 @@ const App: React.FC = () => {
         {currentView === 'home' && renderHome()}
         {currentView === 'about' && <AboutPage />}
         {currentView === 'claims' && <ClaimsPage />}
-        {currentView === 'plans' && <PlansPage onQuoteClick={() => setCurrentView('quote')} />}
-        {currentView === 'quote' && <QuotePage onBack={() => setCurrentView('plans')} />}
+        {currentView === 'plans' && <PlansPage onQuoteClick={(pid) => handleStartQuote(pid)} />}
+        {currentView === 'quote' && <QuotePage onBack={() => setCurrentView('plans')} selectedPlanId={selectedPlanId} />}
         {currentView === 'admin' && <AdminPanel onExit={() => setCurrentView('home')} />}
       </main>
 

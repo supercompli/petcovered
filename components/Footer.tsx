@@ -36,11 +36,15 @@ const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
               <ul className="space-y-4 text-sm">
                 <li className="flex gap-3">
                   <span className="text-primary">📍</span>
-                  <span>The WorkSpace, 191 Bekker Street, Vorna Valley, Midrand, 1685</span>
+                  <span>Gauteng: The WorkSpace, 191 Bekker Street, Vorna Valley, Midrand, 1685</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-primary">📍</span>
+                   <span>Western Cape: Sandown Square Business Park, Block A, Unit 204, Passerina Road, Sandown Rd, Cape Town, 7441</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-primary">📞</span>
-                  <span>010 109 4015</span>
+                  <span>087 655 0525</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-primary">✉️</span>

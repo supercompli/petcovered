@@ -110,7 +110,7 @@ const ClaimsPage: React.FC = () => {
                 Email Support
              </a>
              <a href="tel:0101094015" className="bg-primary text-white px-8 py-3 rounded-2xl font-bold hover:opacity-90 transition-opacity">
-                Call 010 109 4015
+                Call 087 655 0525
              </a>
           </div>
         </div>

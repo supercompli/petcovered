@@ -354,7 +354,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">✨</span>
-                    <h3 className="font-black text-gray-900 text-sm">Routine Care Add-on</h3>
+                    <h3 className="font-black text-gray-900 text-sm">Routine Care Add-on - valued at R1500 per year</h3>
                   </div>
                   <button 
                     onClick={() => handleToggle('routineCare', !formData.routineCare)}

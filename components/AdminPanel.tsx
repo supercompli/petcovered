@@ -134,8 +134,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
                       <p className="text-lg font-black text-gray-900">{new Date(selectedLead.submittedAt).toLocaleDateString()}</p>
                     </div>
                     <div className="bg-gray-50 p-6 rounded-3xl">
-                      <span className="text-[10px] font-black uppercase text-gray-400 block mb-2">Contact Email</span>
-                      <p className="text-sm font-black text-blue-600 underline truncate">{selectedLead.contactEmail}</p>
+                      <span className="text-[10px] font-black uppercase text-gray-400 block mb-2">Add-ons</span>
+                      <p className={`text-lg font-black ${selectedLead.details?.routineCare ? 'text-green-600' : 'text-gray-300'}`}>
+                        {selectedLead.details?.routineCare ? '✨ Routine Care' : 'No Add-ons'}
+                      </p>
                     </div>
                   </div>
 
@@ -279,6 +281,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
   "pet_dob": "ISO-8601",
   "owner_email": "string",
   "selected_plan": "string",
+  "routine_care_included": "boolean",
   "monthly_premium": "string",
   "health_history": "string",
   "acc_holder": "string",

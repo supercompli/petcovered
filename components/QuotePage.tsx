@@ -26,6 +26,8 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     chipNo: '',
     breed: '',
     email: '',
+    // Add-ons
+    routineCare: false,
     // Banking
     accHolder: '',
     accNo: '',
@@ -38,14 +40,17 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
 
   const selectedPlan = PET_PLANS.find(p => p.id === (selectedPlanId || 'comp-plus'));
 
+  // Calculate premium based on base plan + add-ons
   useEffect(() => {
-    if (selectedPlan && !formData.deductionAmount) {
+    if (selectedPlan) {
+      const basePrice = formData.species === 'Dog' ? selectedPlan.priceDog : selectedPlan.priceCat;
+      const total = basePrice + (formData.routineCare ? 85 : 0);
       setFormData(prev => ({ 
         ...prev, 
-        deductionAmount: (formData.species === 'Dog' ? selectedPlan.priceDog : selectedPlan.priceCat).toFixed(2)
+        deductionAmount: total.toFixed(2)
       }));
     }
-  }, [selectedPlan, formData.species]);
+  }, [selectedPlan, formData.species, formData.routineCare]);
 
   useEffect(() => {
     if (formData.dob) {
@@ -64,7 +69,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     setFormData(prev => ({ ...prev, [name]: val }));
   };
 
-  const handleToggle = (name: string, value: string) => {
+  const handleToggle = (name: string, value: any) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -100,6 +105,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       pet_dob: formData.dob,
       owner_email: formData.email,
       selected_plan: selectedPlan?.name || 'Unknown',
+      routine_care_included: formData.routineCare,
       monthly_premium: `R${formData.deductionAmount}`,
       health_history: `${formData.healthCondition} | ${formData.additionalHealth}`,
       acc_holder: formData.accHolder,
@@ -269,7 +275,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
             </div>
           )}
 
-          {/* Step 3: Physical Details */}
+          {/* Step 3: Physical Details & Add-ons */}
           {step === 3 && (
             <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-xl border border-gray-100 animate-slide-up">
               <div className="flex items-center gap-3 mb-8 pb-4 border-b border-gray-50">
@@ -280,16 +286,54 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-5">
+              <div className="grid sm:grid-cols-2 gap-x-5 gap-y-4 mb-8">
                 <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Gender</label>
-                  <div className="flex bg-gray-50 p-1 rounded-xl">{['M', 'F'].map(g => (<button key={g} onClick={() => handleToggle('gender', g)} className={`flex-1 py-2.5 rounded-lg font-black text-xs transition-all ${formData.gender === g ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>{g === 'M' ? 'Male' : 'Female'}</button>))}</div>
+                  <div className="flex bg-gray-50 p-1 rounded-xl">{['M', 'F'].map(g => (<button key={g} onClick={() => handleToggle('gender', g)} className={`flex-1 py-2 rounded-lg font-black text-xs transition-all ${formData.gender === g ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>{g === 'M' ? 'Male' : 'Female'}</button>))}</div>
                 </div>
-                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Breed</label><input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="e.g. Bulldog" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 font-bold text-sm" /></div>
-                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Weight (kg)</label><input type="number" name="weight" value={formData.weight} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
-                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Colour</label><input type="text" name="colour" value={formData.colour} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
-                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Date of Birth</label><input type="date" name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm" /></div>
-                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Microchip No.</label><input type="text" name="chipNo" value={formData.chipNo} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-5 py-3 font-bold text-sm font-mono" /></div>
-                <div className="sm:col-span-2 space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Contact Email</label><input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email for documents..." className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-5 py-3 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Breed</label><input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="e.g. Bulldog" className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-4 py-2 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Weight (kg)</label><input type="number" name="weight" value={formData.weight} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-4 py-2 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Colour</label><input type="text" name="colour" value={formData.colour} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-4 py-2 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Date of Birth</label><input type="date" name="dob" value={formData.dob} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-4 py-2 font-bold text-sm" /></div>
+                <div className="space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Microchip No.</label><input type="text" name="chipNo" value={formData.chipNo} onChange={handleChange} className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 rounded-xl px-4 py-2 font-bold text-sm font-mono" /></div>
+                <div className="sm:col-span-2 space-y-1"><label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Contact Email</label><input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email for documents..." className="w-full bg-gray-50 border-2 border-transparent focus:border-primary/50 focus:bg-white rounded-xl px-4 py-2 font-bold text-sm" /></div>
+              </div>
+
+              {/* Routine Care Upsell */}
+              <div className={`rounded-2xl border-2 transition-all p-5 mb-8 overflow-hidden relative ${formData.routineCare ? 'border-primary bg-primary/[0.02]' : 'border-gray-100 bg-gray-50/50'}`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">✨</span>
+                    <h3 className="font-black text-gray-900 text-sm">Routine Care Add-on</h3>
+                  </div>
+                  <button 
+                    onClick={() => handleToggle('routineCare', !formData.routineCare)}
+                    className={`px-4 py-1.5 rounded-full text-[10px] font-black transition-all ${formData.routineCare ? 'bg-primary text-white shadow-lg' : 'bg-gray-200 text-gray-500'}`}
+                  >
+                    {formData.routineCare ? 'ADDED' : 'ADD + R85'}
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {[
+                    'Sterilisation', 'Vaccinations', 'De-worming', 
+                    'Grooming', 'Tick/Flea Control', 'Anal Gland Exp',
+                    'Dental Polish', 'Microchipping', 'Annual Checkup'
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <div className={`w-3 h-3 rounded-full flex items-center justify-center shrink-0 ${formData.routineCare ? 'bg-primary text-white' : 'bg-gray-300'}`}>
+                        <svg className="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      <span className="text-[9px] font-bold text-gray-600 truncate">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                {formData.routineCare && (
+                  <div className="mt-4 pt-3 border-t border-primary/10 flex justify-between items-center animate-fade-in">
+                    <span className="text-[10px] font-black text-primary uppercase">Combined Premium:</span>
+                    <span className="text-lg font-black text-gray-900">R{formData.deductionAmount}<span className="text-[10px] text-gray-400">/mo</span></span>
+                  </div>
+                )}
               </div>
 
               <div className="mt-8 flex justify-between items-center">
@@ -299,7 +343,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                   disabled={!formData.email || !formData.dob || isCapturing}
                   className="bg-primary text-white px-8 py-3.5 rounded-xl font-black text-base shadow-lg hover:scale-105 transition-transform disabled:opacity-50 flex items-center gap-2"
                 >
-                  {isCapturing ? "Processing..." : "Capture Quote"}
+                  {isCapturing ? "Processing..." : "Continue to Bank"}
                 </button>
               </div>
             </div>
@@ -337,7 +381,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                 <div className="flex items-start gap-3">
                   <input type="checkbox" name="authorise" checked={formData.authorise} onChange={handleChange} className="mt-1 w-5 h-5 rounded border-gray-700 bg-gray-800 text-primary" />
                   <p className="text-[11px] font-bold leading-tight text-gray-300">
-                    I authorise <span className="text-white">GENRIC Pet Insurance</span> to debit <span className="text-primary font-black text-sm">R{formData.deductionAmount}</span> for the {selectedPlan?.name} plan.
+                    I authorise <span className="text-white">GENRIC Pet Insurance</span> to debit <span className="text-primary font-black text-sm">R{formData.deductionAmount}</span> for the {selectedPlan?.name} plan {formData.routineCare && 'including Routine Care'}.
                   </p>
                 </div>
               </div>
@@ -349,7 +393,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                   onClick={finalizeQuote}
                   className="bg-primary text-white px-10 py-4 rounded-xl font-black text-lg shadow-xl hover:scale-105 transition-all disabled:opacity-50"
                 >
-                  Finalize
+                  Finalize Authorization
                 </button>
               </div>
             </div>

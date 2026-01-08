@@ -1,11 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { PET_PLANS } from '../constants';
 
 const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }> = ({ onBack, selectedPlanId }) => {
   const [step, setStep] = useState(1);
+  const [localPlanId, setLocalPlanId] = useState(selectedPlanId || 'comp-plus');
+  const [isChangingPlan, setIsChangingPlan] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
+  
   const [formData, setFormData] = useState({
     // Identity
     petName: '',
@@ -38,19 +41,19 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     authorise: false
   });
 
-  const selectedPlan = PET_PLANS.find(p => p.id === (selectedPlanId || 'comp-plus'));
+  const selectedPlan = useMemo(() => 
+    PET_PLANS.find(p => p.id === localPlanId) || PET_PLANS[0]
+  , [localPlanId]);
 
-  // Calculate premium based on base plan + add-ons
-  useEffect(() => {
-    if (selectedPlan) {
-      const basePrice = formData.species === 'Dog' ? selectedPlan.priceDog : selectedPlan.priceCat;
-      const total = basePrice + (formData.routineCare ? 85 : 0);
-      setFormData(prev => ({ 
-        ...prev, 
-        deductionAmount: total.toFixed(2)
-      }));
-    }
+  // Reactive total price calculation
+  const totalPrice = useMemo(() => {
+    const basePrice = formData.species === 'Dog' ? selectedPlan.priceDog : selectedPlan.priceCat;
+    return (basePrice + (formData.routineCare ? 85 : 0)).toFixed(2);
   }, [selectedPlan, formData.species, formData.routineCare]);
+
+  useEffect(() => {
+    setFormData(prev => ({ ...prev, deductionAmount: totalPrice }));
+  }, [totalPrice]);
 
   useEffect(() => {
     if (formData.dob) {
@@ -87,7 +90,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       premium: `R${formData.deductionAmount}`,
       contactEmail: formData.email || 'N/A',
       details: formData,
-      plan: selectedPlan?.name || 'Unknown'
+      plan: selectedPlan.name
     };
     
     const existingLeads = JSON.parse(localStorage.getItem('petcovered_leads') || '[]');
@@ -104,7 +107,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       pet_weight_kg: formData.weight,
       pet_dob: formData.dob,
       owner_email: formData.email,
-      selected_plan: selectedPlan?.name || 'Unknown',
+      selected_plan: selectedPlan.name,
       routine_care_included: formData.routineCare,
       monthly_premium: `R${formData.deductionAmount}`,
       health_history: `${formData.healthCondition} | ${formData.additionalHealth}`,
@@ -140,8 +143,8 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     window.scrollTo(0, 0);
   };
 
-  const finalizeQuote = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Fix: Defined finalizeQuote to handle the final submission and display the success state
+  const finalizeQuote = () => {
     setSubmitted(true);
     window.scrollTo(0, 0);
   };
@@ -152,7 +155,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
         <div className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-2xl animate-bounce">✓</div>
         <h2 className="text-3xl font-black text-gray-900 mb-2">Finalized & Secure</h2>
         <p className="text-gray-600 max-w-sm mb-8 text-base">
-          Our underwriters at GENRIC will issue your policy document for {selectedPlan?.name} within 24 hours.
+          Our underwriters at GENRIC will issue your policy document for {selectedPlan.name} within 24 hours.
         </p>
         <button onClick={() => window.location.hash = 'home'} className="bg-primary text-white px-10 py-4 rounded-xl font-black shadow-xl">Return to Home</button>
       </div>
@@ -164,7 +167,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
       <div className="max-w-2xl mx-auto px-4">
         
         {/* Compact Stepper */}
-        <div className="mb-8 relative">
+        <div className="mb-6 relative">
           <div className="flex justify-between items-center relative z-10 px-2">
             {['Start', 'Health', 'Details', 'Bank'].map((label, i) => {
               const stepNum = i + 1;
@@ -188,18 +191,66 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
           </div>
         </div>
 
+        {/* PERSISTENT PLAN SUMMARY BAR */}
+        <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="flex items-center justify-between p-4 px-6">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Plan Selection</span>
+              <div className="flex items-center gap-3">
+                <h3 className="font-black text-gray-900">{selectedPlan.name}</h3>
+                <button 
+                  onClick={() => setIsChangingPlan(!isChangingPlan)}
+                  className="text-[10px] font-black text-primary uppercase bg-primary/5 px-2 py-1 rounded hover:bg-primary/10 transition-colors"
+                >
+                  {isChangingPlan ? 'Close' : 'Change Plan'}
+                </button>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Monthly Total</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xs font-black text-primary">R</span>
+                <span className="text-2xl font-black text-primary tracking-tighter">{totalPrice}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Expanded Plan Switcher */}
+          {isChangingPlan && (
+            <div className="p-4 bg-gray-50/50 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-2 animate-fade-in">
+              {PET_PLANS.map(plan => {
+                const planPrice = formData.species === 'Dog' ? plan.priceDog : plan.priceCat;
+                const isSelected = plan.id === localPlanId;
+                return (
+                  <button
+                    key={plan.id}
+                    onClick={() => {
+                      setLocalPlanId(plan.id);
+                      setIsChangingPlan(false);
+                    }}
+                    className={`p-3 rounded-xl text-left border-2 transition-all ${
+                      isSelected ? 'border-primary bg-white shadow-md' : 'border-transparent bg-white/40 hover:bg-white hover:border-gray-200'
+                    }`}
+                  >
+                    <div className="text-[10px] font-black text-gray-900 truncate mb-1">{plan.name}</div>
+                    <div className="text-xs font-bold text-gray-500">R{planPrice.toFixed(0)}</div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
         <div className="space-y-6">
           
           {/* Step 1: Identity */}
           {step === 1 && (
             <div className="bg-white rounded-[32px] p-6 md:p-8 shadow-xl border border-gray-100 animate-slide-up">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-xl">👋</div>
-                  <div>
-                    <h2 className="text-xl font-black text-gray-900">Let's Get Started</h2>
-                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Plan: {selectedPlan?.name}</p>
-                  </div>
+              <div className="flex items-center gap-3 mb-8 pb-4 border-b border-gray-50">
+                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-xl">👋</div>
+                <div>
+                  <h2 className="text-xl font-black text-gray-900">Pet Identity</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Basic Information</p>
                 </div>
               </div>
 
@@ -331,7 +382,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                 {formData.routineCare && (
                   <div className="mt-4 pt-3 border-t border-primary/10 flex justify-between items-center animate-fade-in">
                     <span className="text-[10px] font-black text-primary uppercase">Combined Premium:</span>
-                    <span className="text-lg font-black text-gray-900">R{formData.deductionAmount}<span className="text-[10px] text-gray-400">/mo</span></span>
+                    <span className="text-lg font-black text-gray-900">R{totalPrice}<span className="text-[10px] text-gray-400">/mo</span></span>
                   </div>
                 )}
               </div>
@@ -381,7 +432,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
                 <div className="flex items-start gap-3">
                   <input type="checkbox" name="authorise" checked={formData.authorise} onChange={handleChange} className="mt-1 w-5 h-5 rounded border-gray-700 bg-gray-800 text-primary" />
                   <p className="text-[11px] font-bold leading-tight text-gray-300">
-                    I authorise <span className="text-white">GENRIC Pet Insurance</span> to debit <span className="text-primary font-black text-sm">R{formData.deductionAmount}</span> for the {selectedPlan?.name} plan {formData.routineCare && 'including Routine Care'}.
+                    I authorise <span className="text-white">GENRIC Pet Insurance</span> to debit <span className="text-primary font-black text-sm">R{totalPrice}</span> for the {selectedPlan.name} plan {formData.routineCare && 'including Routine Care'}.
                   </p>
                 </div>
               </div>

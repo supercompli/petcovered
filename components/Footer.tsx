@@ -4,108 +4,97 @@ import Logo from './Logo';
 import GenricLogo from './GenricLogo';
 
 interface FooterProps {
-  onViewChange: (view: 'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin') => void;
-  currentView: 'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin';
+  onViewChange: (view: any) => void;
+  currentView: string;
 }
 
 const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
   const isQuotePage = currentView === 'quote';
 
   return (
-    <footer className="bg-[#0c161c] text-gray-400 pt-16 pb-10">
+    <footer className="bg-[#0c161c] text-gray-400 pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4">
         {!isQuotePage && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
             <div className="space-y-8">
-              <div>
-                <Logo variant="light" className="mb-6 opacity-90" />
-                <p className="text-sm leading-relaxed">
-                  Petcovered® is an affordable health insurance solution for individuals and families. 
-                  It’s great value for money and offers access to private healthcare services.
-                </p>
-              </div>
-              
-              <div className="pt-4 border-t border-gray-800">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-gray-500 mb-4 block">Underwritten by</span>
-                <GenricLogo className="opacity-90 hover:opacity-100 transition-opacity" />
+              <Logo variant="light" className="opacity-90" />
+              <p className="text-sm leading-relaxed max-w-xs">
+                South Africa's premier digital pet insurance provider. Built for pet owners who value speed, transparency, and the best medical care.
+              </p>
+              <div className="pt-4">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 block mb-4">Regulatory Underwriting</span>
+                <GenricLogo className="opacity-80 grayscale hover:grayscale-0 transition-all" />
               </div>
             </div>
-            
+
             <div>
-              <h4 className="text-white font-bold mb-6 border-b border-gray-800 pb-2">Contact</h4>
-              <ul className="space-y-4 text-sm">
+              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">Navigation</h4>
+              <ul className="space-y-4 text-sm font-medium">
+                {['Home', 'Plans', 'About', 'Claims'].map((item) => (
+                  <li key={item}>
+                    <button 
+                      onClick={() => onViewChange(item.toLowerCase() as any)}
+                      className="hover:text-primary transition-colors text-left"
+                    >
+                      {item}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">Contact Us</h4>
+              <ul className="space-y-4 text-sm font-medium">
                 <li className="flex gap-3">
                   <span className="text-primary">📍</span>
-                  <span>Gauteng: The WorkSpace, 191 Bekker Street, Vorna Valley, Midrand, 1685</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-primary">📍</span>
-                   <span>Western Cape: Sandown Square Business Park, Block A, Unit 204, Passerina Road, Sandown Rd, Cape Town, 7441</span>
+                  <span>Midrand & Cape Town</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-primary">📞</span>
-                  <span>087 655 0525</span>
+                  <a href="tel:0876550525" className="hover:text-white transition-colors">087 655 0525</a>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-primary">✉️</span>
-                  <span>hello@petcovered.co.za</span>
+                  <a href="mailto:hello@petcovered.co.za" className="hover:text-white transition-colors">hello@petcovered.co.za</a>
                 </li>
               </ul>
             </div>
-            
-            <div>
-              <h4 className="text-white font-bold mb-6 border-b border-gray-800 pb-2">Quick Links</h4>
-              <ul className="space-y-3 text-sm">
-                <li><button onClick={() => onViewChange('plans')} className="hover:text-white transition-colors text-left">Compare Plans</button></li>
-                <li><button onClick={() => onViewChange('about')} className="hover:text-white transition-colors text-left">About Petcovered®</button></li>
-                <li><button onClick={() => onViewChange('claims')} className="hover:text-white transition-colors text-left">How to Claim</button></li>
-                <li><button onClick={() => onViewChange('home')} className="hover:text-white transition-colors text-left">Product Summary</button></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-bold mb-6 border-b border-gray-800 pb-2">Support</h4>
+
+            <div className="bg-white/5 p-8 rounded-[40px] border border-white/5">
+              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-6 text-center">Get Covered</h4>
               <button 
                 onClick={() => onViewChange('quote')}
-                className="bg-primary text-white w-full py-3 rounded-lg font-bold hover:opacity-90 transition-opacity mb-6 shadow-lg shadow-primary/20"
+                className="bg-primary text-white w-full py-4 rounded-2xl font-black text-sm hover:scale-105 transition-transform shadow-xl shadow-primary/20"
               >
-                Get a Quote
+                Start Free Quote
               </button>
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-primary transition-all cursor-pointer text-white text-xs font-bold border border-gray-700">FB</div>
-                <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-primary transition-all cursor-pointer text-white text-xs font-bold border border-gray-700">LI</div>
-                <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-primary transition-all cursor-pointer text-white text-xs font-bold border border-gray-700">IG</div>
+              <div className="mt-8 flex justify-center gap-4">
+                {['fb', 'li', 'ig'].map(s => (
+                  <div key={s} className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-[10px] font-black text-gray-500 hover:text-white hover:bg-primary transition-all cursor-pointer border border-white/5">
+                    {s.toUpperCase()}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         )}
 
-        <div className={`border-t border-gray-800 flex flex-col items-center gap-6 ${isQuotePage ? 'pt-0' : 'pt-8'}`}>
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-6 w-full">
-            <p className="text-[10px] leading-relaxed max-w-4xl text-center lg:text-left text-gray-500">
-              Petcovered® is part of Covered Financial Services, a registered financial services provider, FSP 54871. 
-              Pet Insurance product is administered and underwritten by GENRIC Insurance Company Limited (FSP: 43638), 
-              an authorised Financial Services Provider and licensed non-life Insurer. 
-              Health Insurance Provider, not a Medical Aid Scheme. 
-              ©2021-2026 Petcovered®. All Rights Reserved.
+        <div className="border-t border-white/5 pt-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="max-w-3xl text-center lg:text-left">
+            <p className="text-[10px] font-medium leading-relaxed text-gray-600">
+              Petcovered® is part of Covered Financial Services (FSP 54871). 
+              Underwritten by GENRIC Insurance Company Limited (FSP 43638). 
+              GENRIC is an authorised Financial Services Provider and licensed non-life Insurer. 
+              This is a Health Insurance Product, not a Medical Aid Scheme. 
+              &copy; 2021-2025 Petcovered. All Rights Reserved.
             </p>
-            <div className="flex gap-6 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
-              <button onClick={() => onViewChange('admin')} className="text-gray-700 hover:text-gray-500 transition-colors">Admin Login</button>
-              {!isQuotePage && (
-                <>
-                  <a href="#" className="hover:text-white transition-colors">Terms</a>
-                  <a href="#" className="hover:text-white transition-colors">Cookies</a>
-                </>
-              )}
-            </div>
           </div>
-          {isQuotePage && (
-            <div className="flex items-center gap-4 pt-4">
-              <span className="text-[9px] uppercase font-bold text-gray-600 tracking-widest">A Secure Insurance Funnel</span>
-              <div className="w-px h-3 bg-gray-800"></div>
-              <Logo variant="light" className="scale-75 opacity-50 grayscale" />
-            </div>
-          )}
+          <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+             <button onClick={() => onViewChange('admin')} className="text-gray-800 hover:text-gray-600 transition-colors">Admin</button>
+             <a href="#" className="hover:text-white">Terms</a>
+             <a href="#" className="hover:text-white">Privacy</a>
+          </div>
         </div>
       </div>
     </footer>

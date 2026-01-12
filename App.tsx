@@ -16,85 +16,106 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin'>('home');
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
+  // Clean URL Routing Logic (History API)
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'claims', 'plans', 'quote', 'admin'].includes(hash)) {
-        setCurrentView(hash as any);
+    const handleLocation = () => {
+      // Get path without leading slash
+      const path = window.location.pathname.replace(/^\//, '') || 'home';
+      const validViews = ['home', 'about', 'claims', 'plans', 'quote', 'admin'];
+      
+      if (validViews.includes(path)) {
+        setCurrentView(path as any);
+      } else {
+        setCurrentView('home');
       }
     };
-    window.addEventListener('hashchange', handleHash);
-    handleHash();
-    return () => window.removeEventListener('hashchange', handleHash);
+
+    window.addEventListener('popstate', handleLocation);
+    handleLocation(); // Sync on mount
+
+    return () => window.removeEventListener('popstate', handleLocation);
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    window.location.hash = currentView;
-  }, [currentView]);
+  const navigateTo = (view: 'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin') => {
+    const path = view === 'home' ? '/' : `/${view}`;
+    window.history.pushState({}, '', path);
+    setCurrentView(view);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleStartQuote = (planId?: string) => {
     if (planId) setSelectedPlanId(planId);
-    setCurrentView('quote');
+    navigateTo('quote');
   };
 
   const renderHome = () => (
-    <>
+    <div className="animate-fade-in">
       <Hero onCtaClick={() => handleStartQuote('comp-plus')} />
       
-      <div id="plans">
+      <div id="plans-section">
         <PricingTable onQuoteClick={(pid) => handleStartQuote(pid)} />
       </div>
 
-      <section className="bg-gray-900 py-24 text-white overflow-hidden relative">
-        <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-12 text-center relative z-10">
-           {[
-             { title: 'Any Licensed Vet', desc: 'Visit any veterinarian in South Africa of your own choice. We pay them directly.', icon: '🩺' },
-             { title: 'Lightning Payouts', icon: '⚡', desc: 'Claims processed and paid within 5 working days of submission.' },
-             { title: 'Lifetime Peace', icon: '🏆', desc: 'Once insured before age 9, your pet stays covered for life regardless of age.' }
-           ].map((item, i) => (
-             <div key={i} className="p-10 bg-white/5 rounded-[40px] border border-white/10 hover:border-primary/50 transition-all group hover:bg-white/[0.08]">
-                <span className="text-6xl block mb-8 transform group-hover:scale-110 transition-transform">{item.icon}</span>
-                <h3 className="text-xl font-black mb-4 tracking-tight uppercase">{item.title}</h3>
-                <p className="text-sm text-gray-400 font-medium leading-relaxed">{item.desc}</p>
-             </div>
-           ))}
+      {/* Trust Badges / Stats Section */}
+      <section className="bg-white py-20 border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {[
+            { label: 'Pets Covered', val: '12,400+' },
+            { label: 'Claims Paid', val: 'R4.2M+' },
+            { label: 'Avg Payout', val: '5 Days' },
+            { label: 'Rating', val: '4.9/5' }
+          ].map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="text-3xl font-black text-primary mb-1">{stat.val}</div>
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
       <FAQ />
 
-      <section className="py-24 bg-primary text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl -mr-64 -mt-64"></div>
+      {/* Final CTA */}
+      <section className="py-24 bg-[#a94694] text-white relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight tracking-tight uppercase">Ready to join the family?</h2>
-          <p className="text-xl opacity-80 mb-12 font-medium leading-relaxed">Protect your pet today and get access to our network of private healthcare providers across South Africa.</p>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">Ready for total peace of mind?</h2>
+          <p className="text-lg opacity-80 mb-10 font-medium">South Africa's most transparent pet health coverage is just 2 minutes away.</p>
           <button 
             onClick={() => handleStartQuote('comp-plus')}
-            className="bg-white text-primary px-16 py-6 rounded-3xl font-black text-xl hover:scale-105 transition-transform shadow-2xl active:scale-95 border-b-4 border-gray-200"
+            className="bg-white text-[#a94694] px-12 py-5 rounded-2xl font-black text-xl hover:scale-105 transition-all shadow-2xl"
           >
-            Activate My Cover
+            Activate Cover Now
           </button>
         </div>
       </section>
-    </>
+    </div>
   );
 
   return (
-    <div className="min-h-screen flex flex-col selection:bg-primary/20">
-      {currentView !== 'admin' && <Header onViewChange={setCurrentView} currentView={currentView} />}
+    <div className="min-h-screen flex flex-col selection:bg-primary/20 bg-gray-50">
+      {currentView !== 'admin' && (
+        <Header onViewChange={navigateTo} currentView={currentView} />
+      )}
       
       <main className="flex-grow">
         {currentView === 'home' && renderHome()}
         {currentView === 'about' && <AboutPage />}
         {currentView === 'claims' && <ClaimsPage />}
         {currentView === 'plans' && <PlansPage onQuoteClick={(pid) => handleStartQuote(pid)} />}
-        {currentView === 'quote' && <QuotePage onBack={() => setCurrentView('plans')} selectedPlanId={selectedPlanId} />}
-        {currentView === 'admin' && <AdminPanel onExit={() => setCurrentView('home')} />}
+        {currentView === 'quote' && (
+          <QuotePage 
+            onBack={() => navigateTo('plans')} 
+            onNavigate={navigateTo} 
+            selectedPlanId={selectedPlanId} 
+          />
+        )}
+        {currentView === 'admin' && <AdminPanel onExit={() => navigateTo('home')} />}
       </main>
 
-      {currentView !== 'admin' && <Footer onViewChange={setCurrentView} currentView={currentView} />}
+      {currentView !== 'admin' && (
+        <Footer onViewChange={navigateTo} currentView={currentView} />
+      )}
+      
       {currentView !== 'admin' && <AIChat />}
     </div>
   );

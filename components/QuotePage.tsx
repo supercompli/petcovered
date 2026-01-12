@@ -2,7 +2,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PET_PLANS } from '../constants';
 
-const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }> = ({ onBack, selectedPlanId }) => {
+interface QuotePageProps {
+  onBack: () => void;
+  onNavigate: (view: any) => void;
+  selectedPlanId: string | null;
+}
+
+const QuotePage: React.FC<QuotePageProps> = ({ onBack, onNavigate, selectedPlanId }) => {
   const [step, setStep] = useState(1);
   const [localPlanId, setLocalPlanId] = useState(selectedPlanId || 'comp-plus');
   const [isChangingPlan, setIsChangingPlan] = useState(false);
@@ -143,7 +149,6 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
     window.scrollTo(0, 0);
   };
 
-  // Fix: Defined finalizeQuote to handle the final submission and display the success state
   const finalizeQuote = () => {
     setSubmitted(true);
     window.scrollTo(0, 0);
@@ -157,7 +162,7 @@ const QuotePage: React.FC<{ onBack: () => void; selectedPlanId: string | null }>
         <p className="text-gray-600 max-w-sm mb-8 text-base">
           Our underwriters at GENRIC will issue your policy document for {selectedPlan.name} within 24 hours.
         </p>
-        <button onClick={() => window.location.hash = 'home'} className="bg-primary text-white px-10 py-4 rounded-xl font-black shadow-xl">Return to Home</button>
+        <button onClick={() => onNavigate('home')} className="bg-primary text-white px-10 py-4 rounded-xl font-black shadow-xl">Return to Home</button>
       </div>
     );
   }

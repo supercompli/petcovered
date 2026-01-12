@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // Change 'base' if deploying to a subfolder, e.g., '/petcovered/'
+  // If hosting in a subfolder (e.g., domain.com/petcovered/), change base to '/petcovered/'
   base: '/',
   resolve: {
     alias: {
@@ -14,11 +14,14 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',
     sourcemap: false,
+    // Code splitting for better performance
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          'react-vendor': ['react', 'react-dom'],
+          'genai-vendor': ['@google/genai']
         },
       },
     },

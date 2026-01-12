@@ -26,7 +26,7 @@ const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[1.05] tracking-tight">
               <EditableText id="hero_title_1" defaultText="South Africa's" /> <br/>
-              <span className="text-primary italic"><EditableText id="hero_title_2" defaultText="Smartest" /></span> <EditableText id="hero_title_3" defaultText="Pet Cover." />
+              <span className="text-primary italic"><EditableText id="hero_title_2" defaultText="Most Affordable" /></span> <EditableText id="hero_title_3" defaultText="Pet Insurance." />
             </h1>
             
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">

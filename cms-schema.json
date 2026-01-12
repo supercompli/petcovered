@@ -1,0 +1,43 @@
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Petcovered CMS Content Schema",
+  "type": "object",
+  "properties": {
+    "hero": {
+      "type": "object",
+      "properties": {
+        "badge": { "type": "string" },
+        "title_1": { "type": "string" },
+        "title_2": { "type": "string" },
+        "title_3": { "type": "string" },
+        "description": { "type": "string" },
+        "cta_primary": { "type": "string" },
+        "cta_secondary": { "type": "string" },
+        "main_image": { "type": "string", "description": "Base64 or URL path to image" },
+        "price_val": { "type": "string" },
+        "price_label": { "type": "string" }
+      },
+      "required": ["title_1", "description", "main_image"]
+    },
+    "about": {
+      "type": "object",
+      "properties": {
+        "hero_title": { "type": "string" },
+        "hero_subtitle": { "type": "string" },
+        "philosophy_title": { "type": "string" },
+        "philosophy_text": { "type": "string" },
+        "founder_quote": { "type": "string" },
+        "founder_name": { "type": "string" }
+      }
+    },
+    "global": {
+      "type": "object",
+      "properties": {
+        "contact_email": { "type": "string", "format": "email" },
+        "contact_phone": { "type": "string" },
+        "office_location": { "type": "string" }
+      }
+    }
+  }
+}

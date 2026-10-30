@@ -37,6 +37,7 @@ const AboutPage: React.FC = () => {
               <EditableImage 
                 id="about_main_image"
                 defaultSrc="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=1000" 
+                alt="Dog resting comfortably while looking at the camera"
                 className="rounded-[60px] shadow-2xl relative z-10"
               />
               <div className="absolute -bottom-10 -right-10 bg-primary text-white p-10 rounded-[40px] shadow-2xl z-20 hidden md:block max-w-xs">
@@ -85,7 +86,7 @@ const AboutPage: React.FC = () => {
                   <div className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-4 border-primary rounded-full z-10 transition-transform group-hover:scale-150"></div>
                   <div className="bg-gray-50 rounded-3xl p-6 hover:bg-white hover:shadow-xl transition-all border border-transparent hover:border-gray-100 lg:h-full">
                     <span className="text-xs font-black text-primary mb-2 block">{m.date}</span>
-                    <h4 className="font-bold text-gray-900 mb-3">{m.title}</h4>
+                    <h3 className="font-bold text-gray-900 mb-3">{m.title}</h3>
                     <p className="text-xs text-gray-500 leading-relaxed">{m.desc}</p>
                   </div>
                 </div>

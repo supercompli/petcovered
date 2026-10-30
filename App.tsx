@@ -87,11 +87,18 @@ const App: React.FC<AppProps> = ({ initialView = 'home', initialPlanId = null })
 
   return (
     <div className="min-h-screen flex flex-col selection:bg-primary/20 bg-gray-50">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:bg-white focus:text-primary focus:font-bold focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+
       {currentView !== 'admin' && (
-        <Header onViewChange={navigateTo} currentView={currentView} />
+        <Header onViewChange={navigateTo} onPlanSelect={handleStartQuote} currentView={currentView} />
       )}
-      
-      <main className="flex-grow">
+
+      <main id="main-content" tabIndex={-1} className="flex-grow focus:outline-none">
         {currentView === 'home' && renderHome()}
         {currentView === 'about' && <AboutPage />}
         {currentView === 'claims' && <ClaimsPage />}

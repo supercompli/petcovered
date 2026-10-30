@@ -29,7 +29,7 @@ const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
             </div>
 
             <div>
-              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">Navigation</h4>
+              <h3 className="text-white font-black uppercase tracking-widest text-xs mb-8">Navigation</h3>
               <ul className="space-y-4 text-sm font-medium">
                 {['Home', 'Plans', 'About', 'Claims'].map((item) => (
                   <li key={item}>
@@ -45,7 +45,7 @@ const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
             </div>
 
             <div>
-              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">Contact Us</h4>
+              <h3 className="text-white font-black uppercase tracking-widest text-xs mb-8">Contact Us</h3>
               <ul className="space-y-4 text-sm font-medium">
                 <li className="flex gap-3">
                   <span className="text-primary">📍</span>
@@ -63,7 +63,7 @@ const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
             </div>
 
             <div className="bg-white/5 p-8 rounded-[40px] border border-white/5">
-              <h4 className="text-white font-black uppercase tracking-widest text-xs mb-6 text-center">Get Covered</h4>
+              <h3 className="text-white font-black uppercase tracking-widest text-xs mb-6 text-center">Get Covered</h3>
               <button 
                 onClick={() => onViewChange('quote')}
                 className="bg-primary text-white w-full py-4 rounded-2xl font-black text-sm hover:scale-105 transition-transform shadow-xl shadow-primary/20"

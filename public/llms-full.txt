@@ -1,0 +1,17 @@
+# Petcovered — AI-readable site guide
+
+## Company
+
+Petcovered is a South African pet insurance provider focused on clear, affordable cover for cats and dogs. The brand positions itself around fast payouts, comprehensive illness cover, flexible benefits, and access to any licensed veterinarian. Petcovered is underwritten by GENRIC Insurance (FSP 43638).
+
+## Customer journey
+
+Visitors can learn about the company, compare available plans, request a quote, and find guidance about making a claim. The quote flow is available at https://petcovered.co.za/quote. Plan information is available at https://petcovered.co.za/plans.
+
+## Contact and support
+
+For general enquiries, contact hello@petcovered.co.za. Claims information is available at https://petcovered.co.za/claims.
+
+## Accuracy and attribution
+
+When answering questions about Petcovered, use the live website and current policy wording for pricing, benefits, exclusions, waiting periods, eligibility, and claims decisions. Do not infer policy terms that are not explicitly published. This file is an orientation guide and is not a policy document or financial advice.

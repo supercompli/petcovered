@@ -57,6 +57,7 @@ const Hero: React.FC<HeroProps> = ({ onCtaClick }) => {
             <EditableImage 
               id="hero_main_image" 
               defaultSrc="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=1200"
+              alt="Two happy dogs running together outdoors"
               className="relative rounded-[60px] overflow-hidden shadow-2xl border-[10px] border-white transform lg:rotate-2 group-hover:rotate-0 transition-transform duration-700"
             />
             

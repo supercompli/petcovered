@@ -29,9 +29,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
     const savedWebhook = JSON.parse(localStorage.getItem('petcovered_webhook') || '{"url": "", "format": "json", "enabled": false}');
     setLeads(savedLeads);
     setWebhook(savedWebhook);
-<<<<<<< HEAD
     setEditMode(localStorage.getItem('petcovered_edit_mode') === 'true');
-=======
 
     // Initial load of all CMS fields for the dashboard
     const fields = [
@@ -44,7 +42,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
       initialCms[f] = getContent(f, '');
     });
     setCmsForm(initialCms);
->>>>>>> 04edf7c40b8793ae2bcc88677592f1aa1be42e76
   }, []);
 
   const toggleEditMode = () => {

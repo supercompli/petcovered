@@ -102,35 +102,35 @@ const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
       </section>
 
       {/* Comparison Matrix Table */}
-      <section className="max-w-[100vw] 2xl:max-w-[1600px] mx-auto px-0 md:px-8 pb-24 -mt-24 relative z-30">
-        <div className="bg-white md:rounded-[48px] shadow-2xl overflow-hidden border-y md:border-x-4 border-gray-100">
+      <section className="max-w-[100vw] 2xl:max-w-[1600px] mx-auto px-0 md:px-8 pb-12 -mt-24 relative z-30">
+        <div className="bg-white md:rounded-2xl shadow-xl overflow-hidden border-y md:border-x border-gray-100">
           <div className="overflow-x-auto overflow-y-hidden custom-scrollbar">
-            <table className="w-full text-left border-collapse min-w-[1100px] table-fixed">
+            <table className="w-full text-left border-collapse min-w-[860px] table-fixed">
               <thead>
                 <tr className="bg-gray-50/95 backdrop-blur-md sticky top-0 z-40 border-b-2 border-gray-100">
-                  <th className="p-6 md:p-8 text-[11px] font-black uppercase text-gray-400 tracking-[0.2em] w-[220px] md:w-[280px] sticky left-0 bg-gray-50 z-50 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]">
+                  <th className="px-4 py-3 md:px-5 text-[10px] font-black uppercase text-gray-400 tracking-widest w-[170px] md:w-[220px] sticky left-0 bg-gray-50 z-50 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]">
                     Feature / Cover
                   </th>
                   {REVERSED_PLANS.map(plan => {
                     const basePrice = (species === 'dog' ? plan.priceDog : plan.priceCat) * petCount;
                     const finalPrice = basePrice * (1 - discount);
                     return (
-                      <th key={plan.id} className={`p-6 md:p-8 text-center transition-colors ${plan.featured ? 'bg-primary/5' : ''}`}>
-                        <div className="flex flex-col items-center gap-2">
-                          <span className={`block text-[10px] md:text-xs font-black uppercase tracking-tighter ${plan.featured ? 'text-primary' : 'text-gray-400'}`}>
+                      <th key={plan.id} className={`px-3 py-3 md:px-4 text-center transition-colors ${plan.featured ? 'bg-primary/5' : ''}`}>
+                        <div className="flex flex-col items-center gap-1">
+                          <span className={`block text-[10px] font-black uppercase tracking-tighter ${plan.featured ? 'text-primary' : 'text-gray-400'}`}>
                             {plan.featured ? '★ Most Popular' : 'Premium'}
                           </span>
-                          <span className="block text-lg md:text-xl font-black text-gray-900 leading-tight">
+                          <span className="block text-sm md:text-base font-black text-gray-900 leading-tight">
                             {plan.name}
                           </span>
                           <div className="flex items-baseline gap-0.5">
-                            <span className="text-xs font-bold text-gray-400">R</span>
-                            <span className="text-3xl font-black text-gray-900 tracking-tighter">{Math.round(finalPrice)}</span>
+                            <span className="text-[11px] font-bold text-gray-400">R</span>
+                            <span className="text-2xl font-black text-gray-900 tracking-tighter">{Math.round(finalPrice)}</span>
                             <span className="text-[10px] font-bold text-gray-400">/mo</span>
                           </div>
-                          <button 
+                          <button
                             onClick={() => onQuoteClick(plan.id)}
-                            className={`mt-4 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                            className={`mt-1 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
                               plan.featured ? 'bg-primary text-white shadow-lg' : 'bg-gray-900 text-white'
                             }`}
                           >
@@ -145,8 +145,8 @@ const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
               <tbody className="divide-y divide-gray-100">
                 {comparisonRows.map((row, idx) => (
                   <tr key={idx} className="hover:bg-primary/[0.02] transition-colors group">
-                    <td className="p-5 md:p-7 sticky left-0 bg-white z-30 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)] border-r border-gray-50">
-                      <span className="text-xs md:text-sm font-black text-gray-800 group-hover:text-primary transition-colors block leading-tight">
+                    <td className="px-4 py-2 md:px-5 sticky left-0 bg-white z-30 shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)] border-r border-gray-50">
+                      <span className="text-xs md:text-[13px] font-black text-gray-800 group-hover:text-primary transition-colors block leading-tight">
                         {row.label}
                       </span>
                     </td>
@@ -157,27 +157,27 @@ const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
                       const isWarning = cellData.startsWith('⚠️');
 
                       return (
-                        <td key={p.id} className={`p-5 md:p-7 text-center transition-colors ${p.featured ? 'bg-primary/[0.01]' : ''}`}>
+                        <td key={p.id} className={`px-3 py-1.5 text-center transition-colors ${p.featured ? 'bg-primary/[0.01]' : ''}`}>
                           <div className="flex flex-col items-center justify-center">
                             {isYes ? (
-                              <div className="bg-green-500 text-white w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center shadow-lg shadow-green-500/20 transform group-hover:scale-110 transition-transform">
-                                <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <div className="bg-green-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm transform group-hover:scale-110 transition-transform">
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
                                 </svg>
                               </div>
                             ) : isNo ? (
-                              <div className="text-gray-200 font-black text-lg md:text-xl opacity-40">✕</div>
+                              <div className="text-gray-200 font-black text-base opacity-40">✕</div>
                             ) : isWarning ? (
-                              <div className="flex flex-col items-center gap-1.5 max-w-[140px]">
-                                 <div className="bg-amber-100 text-amber-600 w-7 h-7 md:w-8 md:h-8 rounded-xl flex items-center justify-center shadow-sm">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <div className="flex flex-col items-center gap-1 max-w-[160px]">
+                                 <div className="bg-amber-100 text-amber-600 w-6 h-6 rounded-lg flex items-center justify-center shadow-sm">
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
                                  </div>
                                  <span className="text-[9px] md:text-[10px] font-black text-amber-700 leading-tight text-center">{cellData.replace('⚠️ ', '')}</span>
                               </div>
                             ) : (
-                              <span className="text-[10px] md:text-[11px] font-black text-gray-500 bg-gray-100/50 px-3 py-1.5 rounded-lg whitespace-pre-line inline-block border border-gray-100">
+                              <span className="text-[10px] md:text-[11px] font-black text-gray-500 bg-gray-100/50 px-2 py-1 rounded-md whitespace-pre-line inline-block border border-gray-100">
                                 {cellData}
                               </span>
                             )}
@@ -191,7 +191,7 @@ const PlansPage: React.FC<PlansPageProps> = ({ onQuoteClick }) => {
             </table>
           </div>
           
-          <div className="bg-gray-50 p-6 flex items-center justify-center md:hidden border-t">
+          <div className="bg-gray-50 p-3 flex items-center justify-center md:hidden border-t">
             <p className="text-xs font-bold text-gray-400 flex items-center gap-2">
               <svg className="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16l-4-4m0 0l4-4m-4 4h18" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/></svg>
               Scroll to compare plans

@@ -1,0 +1,25 @@
+# Petcovered
+
+> Affordable pet health insurance for South African pet owners.
+
+## About
+
+Petcovered helps people in South Africa protect their dogs and cats with straightforward pet health insurance. Plans are designed around affordability, illness cover, fast payouts, and access to a licensed vet of the customer's choice.
+
+## Important facts
+
+- Website: https://petcovered.co.za/
+- Country served: South Africa
+- Contact: hello@petcovered.co.za
+- Underwriter: GENRIC Insurance (FSP 43638)
+- Primary topics: pet insurance, dog insurance, cat insurance, pet healthcare, claims, plans
+
+## Key pages
+
+- Home: https://petcovered.co.za/
+- Plans: https://petcovered.co.za/plans
+- About Petcovered: https://petcovered.co.za/about
+- Claims: https://petcovered.co.za/claims
+- Quote: https://petcovered.co.za/quote
+
+Use the website's plan and policy wording pages as the source of truth for eligibility, exclusions, waiting periods, limits, premiums, and claims requirements.

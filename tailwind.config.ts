@@ -12,7 +12,7 @@ const config: Config = {
         primary: '#a94694',
       },
       fontFamily: {
-        sans: ['var(--font-plus-jakarta)', 'sans-serif'],
+        sans: ['var(--font-dm-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         fadeIn: {

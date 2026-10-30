@@ -60,10 +60,11 @@ export const EditableText: React.FC<TextProps> = ({ id, defaultText, className, 
 interface ImageProps {
   id: string;
   defaultSrc: string;
+  alt: string;
   className?: string;
 }
 
-export const EditableImage: React.FC<ImageProps> = ({ id, defaultSrc, className }) => {
+export const EditableImage: React.FC<ImageProps> = ({ id, defaultSrc, alt, className }) => {
   const [src, setSrc] = useState(defaultSrc);
   const [editMode, setEditMode] = useState(false);
 
@@ -91,7 +92,7 @@ export const EditableImage: React.FC<ImageProps> = ({ id, defaultSrc, className 
 
   return (
     <div className={`relative group ${className}`}>
-      <img src={src} alt="CMS Content" className="w-full h-full object-cover" />
+      <img src={src} alt={alt} className="w-full h-full object-cover" />
       {editMode && (
         <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
           <label className="bg-white text-primary px-4 py-2 rounded-full font-black text-xs cursor-pointer shadow-xl">

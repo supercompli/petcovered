@@ -99,6 +99,14 @@ export const PET_PLANS: PetPlan[] = [
   }
 ];
 
+export const ROUTINE_CARE_PRICE = 85;
+export const ROUTINE_CARE_ANNUAL_VALUE = 1500;
+export const ROUTINE_CARE_ITEMS = [
+  'Sterilisation', 'Vaccinations', 'De-worming',
+  'Grooming', 'Tick/Flea Control', 'Anal Gland Exp',
+  'Dental Polish', 'Microchipping', 'Annual Checkup'
+];
+
 export const FAQS: FAQItem[] = [
   {
     question: "How many family members (pets) can you cover?",

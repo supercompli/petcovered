@@ -48,6 +48,42 @@ export interface WebhookSettings {
 }
 
 /**
+ * Wire format the quote flow POSTs to /api/quote once the debit order is authorised.
+ * Prices are deliberately absent: the server recomputes them from the plan, species and add-on.
+ * The full account number is for the team notification only; the customer's copy masks it.
+ */
+export interface ApplicationRequest {
+  reference: string;
+  planId: string;
+  routineCare: boolean;
+  authorise: boolean;
+  email: string;
+  pet: {
+    name: string;
+    species: string;
+    breed: string;
+    gender: string;
+    colour: string;
+    weight: string;
+    dob: string;
+    chipNo: string;
+  };
+  health: {
+    conditions: string;
+    additional: string;
+    vaccinations: string;
+    commercial: string;
+    vetPermission: string;
+  };
+  banking: {
+    accHolder: string;
+    bank: string;
+    accNo: string;
+    debitDay: string;
+  };
+}
+
+/**
  * CMS Content Schema
  * Defines all editable regions across the application
  */

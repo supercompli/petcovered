@@ -2,6 +2,7 @@
 import React from 'react';
 import Logo from './Logo';
 import GenricLogo from './GenricLogo';
+import { EditableText } from './EditableWrapper';
 
 interface FooterProps {
   onViewChange: (view: any) => void;
@@ -48,15 +49,15 @@ const Footer: React.FC<FooterProps> = ({ onViewChange, currentView }) => {
               <ul className="space-y-4 text-sm font-medium">
                 <li className="flex gap-3">
                   <span className="text-primary">📍</span>
-                  <span>Midrand & Cape Town</span>
+                  <EditableText id="office_location" defaultText="Midrand & Cape Town" />
                 </li>
                 <li className="flex gap-3">
                   <span className="text-primary">📞</span>
-                  <a href="tel:0876550525" className="hover:text-white transition-colors">087 655 0525</a>
+                  <EditableText id="contact_phone" defaultText="087 655 0525" />
                 </li>
                 <li className="flex gap-3">
                   <span className="text-primary">✉️</span>
-                  <a href="mailto:hello@petcovered.co.za" className="hover:text-white transition-colors">hello@petcovered.co.za</a>
+                  <EditableText id="contact_email" defaultText="hello@petcovered.co.za" />
                 </li>
               </ul>
             </div>

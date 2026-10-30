@@ -12,7 +12,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL('https://petcovered.co.za'),
   title: 'Petcovered | Affordable Pet Health Insurance',
-  description: 'Affordable pet health insurance for South African pet owners.',
+  description: 'Affordable & convenient pet health insurance for pet owners.',
   applicationName: 'Petcovered',
   category: 'finance',
   keywords: [
@@ -29,19 +29,25 @@ export const metadata: Metadata = {
     url: 'https://petcovered.co.za/',
     siteName: 'Petcovered',
     title: 'Petcovered | Affordable Pet Health Insurance',
-    description: 'Affordable pet health insurance for South African pet owners.',
+    description: 'Affordable & convenient pet health insurance for pet owners.',
     locale: 'en_ZA',
     images: [{
-      url: '/Affordable%20Pet%20Insurance%20for%20South%20Africans.png',
-      width: 1731,
-      height: 909,
-      alt: 'Petcovered: affordable pet health insurance for South African pet owners',
+      url: '/affordable-pet-insurance-new.png',
+      width: 1200,
+      height: 630,
+      alt: 'Petcovered: affordable & convenient pet health insurance for pet owners',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Petcovered | Affordable Pet Health Insurance',
-    description: 'Affordable pet health insurance for South African pet owners.',
+    description: 'Affordable & convenient pet health insurance for pet owners.',
+    images: [{
+      url: '/affordable-pet-insurance-new.png',
+      width: 1200,
+      height: 630,
+      alt: 'Petcovered: affordable pet health insurance for pet owners',
+    }],
   },
   robots: {
     index: true,
@@ -64,9 +70,9 @@ const structuredData = [
     '@id': 'https://petcovered.co.za/#organization',
     name: 'Petcovered',
     url: 'https://petcovered.co.za/',
-    logo: 'https://petcovered.co.za/Affordable%20Pet%20Insurance%20for%20South%20Africans.png',
+    logo: 'https://petcovered.co.za/affordable-pet-insurance-new.png',
     email: 'hello@petcovered.co.za',
-    description: 'Affordable pet health insurance for South African pet owners.',
+    description: 'Affordable & convenient pet health insurance for pet owners.',
     areaServed: {
       '@type': 'Country',
       name: 'South Africa',

@@ -11,14 +11,16 @@ interface TextProps {
 
 export const EditableText: React.FC<TextProps> = ({ id, defaultText, className, multiline }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [val, setVal] = useState(getContent(id, defaultText));
-  const [editMode, setEditMode] = useState(localStorage.getItem('petcovered_edit_mode') === 'true');
+  const [val, setVal] = useState(defaultText);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
+    setVal(getContent(id, defaultText));
     const checkMode = () => setEditMode(localStorage.getItem('petcovered_edit_mode') === 'true');
+    checkMode();
     window.addEventListener('cms_mode_change', checkMode);
     return () => window.removeEventListener('cms_mode_change', checkMode);
-  }, []);
+  }, [defaultText, id]);
 
   const handleBlur = () => {
     setIsEditing(false);
@@ -62,14 +64,16 @@ interface ImageProps {
 }
 
 export const EditableImage: React.FC<ImageProps> = ({ id, defaultSrc, className }) => {
-  const [src, setSrc] = useState(getContent(id, defaultSrc));
-  const [editMode, setEditMode] = useState(localStorage.getItem('petcovered_edit_mode') === 'true');
+  const [src, setSrc] = useState(defaultSrc);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
+    setSrc(getContent(id, defaultSrc));
     const checkMode = () => setEditMode(localStorage.getItem('petcovered_edit_mode') === 'true');
+    checkMode();
     window.addEventListener('cms_mode_change', checkMode);
     return () => window.removeEventListener('cms_mode_change', checkMode);
-  }, []);
+  }, [defaultSrc, id]);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

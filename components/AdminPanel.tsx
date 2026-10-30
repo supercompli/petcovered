@@ -14,7 +14,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
   const [activeTab, setActiveTab] = useState<'leads' | 'settings' | 'cms'>('leads');
   const [leads, setLeads] = useState<QuoteLead[]>([]);
   const [selectedLead, setSelectedLead] = useState<QuoteLead | null>(null);
-  const [editMode, setEditMode] = useState(localStorage.getItem('petcovered_edit_mode') === 'true');
+  const [editMode, setEditMode] = useState(false);
   const [webhook, setWebhook] = useState<WebhookSettings>({
     url: '',
     format: 'json',
@@ -26,6 +26,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onExit }) => {
     const savedWebhook = JSON.parse(localStorage.getItem('petcovered_webhook') || '{"url": "", "format": "json", "enabled": false}');
     setLeads(savedLeads);
     setWebhook(savedWebhook);
+    setEditMode(localStorage.getItem('petcovered_edit_mode') === 'true');
   }, []);
 
   const toggleEditMode = () => {

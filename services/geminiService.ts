@@ -1,8 +1,7 @@
 
-import { GoogleGenAI } from "@google/genai";
 import { PET_PLANS } from "../constants";
 
-const SYSTEM_INSTRUCTION = `
+export const SYSTEM_INSTRUCTION = `
 You are an expert Pet Insurance Assistant for Petcovered®, underwritten by GENRIC Insurance.
 Your goal is to help users understand their pet insurance options based on the official 5-plan brochure.
 
@@ -35,18 +34,17 @@ Guidelines:
 
 export const chatWithAssistant = async (message: string) => {
   try {
-    // Initialize inside the function to ensure process.env.API_KEY is available
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: message,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.7,
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ message }),
     });
-    
-    return response.text || "I'm sorry, I couldn't process that. Please try again or contact our support.";
+
+    const data = await response.json();
+
+    return data.text || "I'm sorry, I couldn't process that. Please try again or contact our support.";
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "I'm having trouble connecting to my knowledge base. Please try again in a moment.";

@@ -1,5 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PricingTable from './components/PricingTable';
@@ -12,40 +15,31 @@ import AdminPanel from './components/AdminPanel';
 import Hero from './components/Hero';
 import FAQ from './components/FAQ';
 
-const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin'>('home');
-  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+export type AppView = 'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin';
 
-  // Clean URL Routing Logic (History API)
-  useEffect(() => {
-    const handleLocation = () => {
-      // Get path without leading slash
-      const path = window.location.pathname.replace(/^\//, '') || 'home';
-      const validViews = ['home', 'about', 'claims', 'plans', 'quote', 'admin'];
-      
-      if (validViews.includes(path)) {
-        setCurrentView(path as any);
-      } else {
-        setCurrentView('home');
-      }
-    };
+interface AppProps {
+  initialView?: AppView;
+  initialPlanId?: string | null;
+}
 
-    window.addEventListener('popstate', handleLocation);
-    handleLocation(); // Sync on mount
+const viewToPath = (view: AppView) => (view === 'home' ? '/' : `/${view}`);
 
-    return () => window.removeEventListener('popstate', handleLocation);
-  }, []);
+const App: React.FC<AppProps> = ({ initialView = 'home', initialPlanId = null }) => {
+  const router = useRouter();
+  const [currentView, setCurrentView] = useState<AppView>(initialView);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(initialPlanId);
 
-  const navigateTo = (view: 'home' | 'about' | 'claims' | 'plans' | 'quote' | 'admin') => {
-    const path = view === 'home' ? '/' : `/${view}`;
-    window.history.pushState({}, '', path);
+  const navigateTo = (view: AppView) => {
     setCurrentView(view);
+    router.push(viewToPath(view));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartQuote = (planId?: string) => {
     if (planId) setSelectedPlanId(planId);
-    navigateTo('quote');
+    setCurrentView('quote');
+    router.push(planId ? `/quote?plan=${encodeURIComponent(planId)}` : '/quote');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const renderHome = () => (
